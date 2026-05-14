@@ -1,0 +1,222 @@
+[
+  {
+    "skill": "TypeScript",
+    "level": "expert",
+    "category": "language",
+    "proof": {
+      "projects": ["research-agent", "multi-agent-code-reviewer", "rag-agent-memory"],
+      "courses": [],
+      "experience": ["jobsity-ebervetter", "jobsity-hollister", "kenility-zenbusiness"]
+    }
+  },
+  {
+    "skill": "JavaScript (ES6+)",
+    "level": "expert",
+    "category": "language",
+    "proof": {
+      "projects": ["research-agent", "multi-agent-code-reviewer", "rag-agent-memory"],
+      "courses": [],
+      "experience": ["jobsity-ebervetter", "jobsity-hollister", "chiatk-crypto", "oktana-salesforce"]
+    }
+  },
+  {
+    "skill": "Python",
+    "level": "proficient",
+    "category": "language",
+    "proof": {
+      "projects": [],
+      "courses": [],
+      "experience": ["jobsity-ebervetter"]
+    }
+  },
+  {
+    "skill": "SQL",
+    "level": "proficient",
+    "category": "language",
+    "proof": {
+      "projects": ["rag-agent-memory"],
+      "courses": [],
+      "experience": ["jobsity-ebervetter", "penguin-academy"]
+    }
+  },
+  {
+    "skill": "Dart",
+    "level": "familiar",
+    "category": "language",
+    "proof": {
+      "projects": [],
+      "courses": [],
+      "experience": []
+    }
+  },
+  {
+    "skill": "Next.js",
+    "level": "expert",
+    "category": "framework",
+    "proof": {
+      "projects": ["research-agent", "multi-agent-code-reviewer", "rag-agent-memory"],
+      "courses": [],
+      "experience": ["jobsity-ebervetter", "jobsity-hollister", "penguin-academy", "kenility-zenbusiness"]
+    }
+  },
+  {
+    "skill": "React",
+    "level": "expert",
+    "category": "framework",
+    "proof": {
+      "projects": ["research-agent", "multi-agent-code-reviewer", "rag-agent-memory"],
+      "courses": [],
+      "experience": ["jobsity-ebervetter", "jobsity-hollister", "kenility-zenbusiness", "chiatk-crypto", "oktana-salesforce"]
+    }
+  },
+  {
+    "skill": "React Native (Expo)",
+    "level": "proficient",
+    "category": "framework",
+    "proof": {
+      "projects": [],
+      "courses": [],
+      "experience": ["jobsity-ebervetter", "oktana-salesforce"]
+    }
+  },
+  {
+    "skill": "Node.js",
+    "level": "expert",
+    "category": "framework",
+    "proof": {
+      "projects": ["research-agent", "multi-agent-code-reviewer", "rag-agent-memory"],
+      "courses": [],
+      "experience": ["jobsity-hollister", "penguin-academy", "kenility-zenbusiness"]
+    }
+  },
+  {
+    "skill": "Flask / FastAPI",
+    "level": "proficient",
+    "category": "framework",
+    "proof": {
+      "projects": [],
+      "courses": [],
+      "experience": []
+    }
+  },
+  {
+    "skill": "PostgreSQL",
+    "level": "proficient",
+    "category": "infra",
+    "proof": {
+      "projects": ["rag-agent-memory"],
+      "courses": [],
+      "experience": ["penguin-academy"]
+    }
+  },
+  {
+    "skill": "AWS",
+    "level": "proficient",
+    "category": "infra",
+    "proof": {
+      "projects": [],
+      "courses": [],
+      "experience": ["jobsity-ebervetter", "penguin-academy"]
+    }
+  },
+  {
+    "skill": "Docker",
+    "level": "proficient",
+    "category": "infra",
+    "proof": {
+      "projects": [],
+      "courses": [],
+      "experience": ["jobsity-hollister", "kenility-zenbusiness"]
+    }
+  },
+  {
+    "skill": "Vercel",
+    "level": "expert",
+    "category": "infra",
+    "proof": {
+      "projects": ["research-agent", "multi-agent-code-reviewer", "rag-agent-memory"],
+      "courses": [],
+      "experience": ["penguin-academy"]
+    }
+  },
+  {
+    "skill": "Anthropic Claude (LLM integration)",
+    "level": "expert",
+    "category": "ai",
+    "proof": {
+      "projects": ["research-agent", "multi-agent-code-reviewer", "rag-agent-memory"],
+      "courses": [],
+      "experience": ["jobsity-ebervetter"]
+    }
+  },
+  {
+    "skill": "RAG systems",
+    "level": "proficient",
+    "category": "ai",
+    "proof": {
+      "projects": ["rag-agent-memory"],
+      "courses": [],
+      "experience": ["jobsity-ebervetter"]
+    }
+  },
+  {
+    "skill": "OpenAI integration",
+    "level": "proficient",
+    "category": "ai",
+    "proof": {
+      "projects": [],
+      "courses": [],
+      "experience": ["jobsity-ebervetter"]
+    }
+  },
+  {
+    "skill": "OCR pipelines (AWS Comprehend Medical, AWS Transcribe)",
+    "level": "proficient",
+    "category": "ai",
+    "proof": {
+      "projects": [],
+      "courses": [],
+      "experience": ["jobsity-ebervetter"]
+    }
+  },
+  {
+    "skill": "AI coding agents (Cursor, Claude Code, Gemini)",
+    "level": "expert",
+    "category": "ai",
+    "proof": {
+      "projects": ["research-agent", "multi-agent-code-reviewer", "rag-agent-memory"],
+      "courses": [],
+      "experience": ["jobsity-ebervetter"]
+    }
+  },
+  {
+    "skill": "Remote async collaboration (EST/CST)",
+    "level": "expert",
+    "category": "soft",
+    "proof": {
+      "projects": [],
+      "courses": [],
+      "experience": ["jobsity-ebervetter", "jobsity-hollister", "kenility-zenbusiness", "chiatk-crypto"]
+    }
+  },
+  {
+    "skill": "Technical leadership / sole ownership",
+    "level": "proficient",
+    "category": "soft",
+    "proof": {
+      "projects": [],
+      "courses": [],
+      "experience": ["penguin-academy"]
+    }
+  },
+  {
+    "skill": "Accessibility (WCAG 2.1)",
+    "level": "proficient",
+    "category": "soft",
+    "proof": {
+      "projects": [],
+      "courses": [],
+      "experience": ["jobsity-ebervetter", "jobsity-hollister"]
+    }
+  }
+]

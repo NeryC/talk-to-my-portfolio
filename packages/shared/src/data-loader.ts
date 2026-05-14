@@ -3,6 +3,9 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { z } from "zod";
 import { ProjectSummarySchema, type ProjectSummary } from "./schemas/project.js";
+import { ExperienceSchema, type Experience } from "./schemas/experience.js";
+import { SkillSchema, type Skill } from "./schemas/skill.js";
+import { CvSchema, type Cv } from "./schemas/cv.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(__dirname, "..", "data");
@@ -27,4 +30,23 @@ export function loadProjectCaseStudy(slug: string): string {
   } catch {
     throw new Error(`unknown project slug: ${slug}`);
   }
+}
+
+export function loadExperience(): Experience[] {
+  const raw = readFileSync(join(DATA_DIR, "experience.json"), "utf-8");
+  return z.array(ExperienceSchema).parse(JSON.parse(raw));
+}
+
+export function loadSkills(): Skill[] {
+  const raw = readFileSync(join(DATA_DIR, "skills.json"), "utf-8");
+  return z.array(SkillSchema).parse(JSON.parse(raw));
+}
+
+export function loadCv(): Cv {
+  const raw = readFileSync(join(DATA_DIR, "cv.json"), "utf-8");
+  return CvSchema.parse(JSON.parse(raw));
+}
+
+export function loadCvMarkdown(): string {
+  return readFileSync(join(DATA_DIR, "cv.md"), "utf-8");
 }

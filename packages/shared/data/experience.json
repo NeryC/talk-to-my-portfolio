@@ -1,0 +1,129 @@
+[
+  {
+    "companyKey": "jobsity-ebervetter",
+    "company": "Jobsity (Client: Ebervetter, Healthcare US)",
+    "role": "Senior Full-Stack Developer",
+    "period": "Feb 2025 – Jan 2026",
+    "location": "Remote (Paraguay → USA)",
+    "summary": "Architected a clinician-facing Next.js 15 platform with AI/LLM and OCR pipelines (AWS Transcribe + AWS Comprehend Medical), and led a service-oriented React Native mobile state architecture across 20+ MobX State Tree modules.",
+    "metrics": [
+      "Cut clinician documentation time by 60% via AI/LLM + OCR integration",
+      "Accelerated mobile feature delivery by 40% using AI coding agents (Cursor, Claude Code, Gemini)",
+      "20+ MobX State Tree modules in a service-oriented mobile architecture",
+      "Enforced WCAG 2.1 accessibility across clinician-facing interfaces"
+    ],
+    "stack": [
+      "Next.js 15",
+      "React Native",
+      "TypeScript",
+      "GraphQL",
+      "React Query",
+      "MobX State Tree",
+      "AWS Transcribe",
+      "AWS Comprehend Medical",
+      "AI/LLM (OpenAI, Anthropic)",
+      "a11y (WCAG 2.1)"
+    ]
+  },
+  {
+    "companyKey": "jobsity-hollister",
+    "company": "Jobsity (Clients: Hollister, Abercrombie & Fitch)",
+    "role": "Senior Full-Stack Developer",
+    "period": "Apr 2023 – Jan 2024",
+    "location": "Remote",
+    "summary": "Built blazing-fast Next.js e-commerce storefronts (SSR/SSG) for global retail brands with Contentful CMS integration and strict a11y compliance.",
+    "metrics": [
+      "Shipped SSR/SSG storefronts for Hollister and Abercrombie & Fitch",
+      "WCAG-compliant e-commerce flows (ARIA roles, semantic HTML, keyboard nav)",
+      "Shorter release cycles via Docker-based deployments"
+    ],
+    "stack": [
+      "Next.js (SSR/SSG)",
+      "React",
+      "Node.js",
+      "Contentful",
+      "Docker",
+      "React Testing Library",
+      "Tailwind CSS",
+      "a11y"
+    ]
+  },
+  {
+    "companyKey": "penguin-academy",
+    "company": "Penguin Academy",
+    "role": "Lead Developer — CodePro Platform",
+    "period": "May 2024 – Jan 2025",
+    "location": "Asunción, Paraguay (Hybrid)",
+    "summary": "Solely owned the CodePro learning platform end-to-end: features, maintenance, decisions, and roadmap, serving 90+ students across intensive 8-month bootcamps.",
+    "metrics": [
+      "Sole engineer serving 90+ bootcamp students",
+      "Maintained 99.9% uptime on Vercel",
+      "Owned roadmap, decision-making and infra cost optimization"
+    ],
+    "stack": [
+      "Next.js 14",
+      "TailwindCSS",
+      "Firebase",
+      "Node.js",
+      "Google Cloud",
+      "Heroku",
+      "Cloudflare",
+      "Vercel",
+      "AWS S3",
+      "PostgreSQL"
+    ]
+  },
+  {
+    "companyKey": "kenility-zenbusiness",
+    "company": "Kenility (Client: ZenBusiness)",
+    "role": "Full-Stack Developer (React, Next.js, Node)",
+    "period": "Jan 2022 – Jan 2023",
+    "location": "Remote",
+    "summary": "Maintained and expanded core features of the ZenBusiness platform using React and Next.js with rigorous testing and Docker-based deployments.",
+    "metrics": [
+      "Shipped features with React Testing Library coverage",
+      "Optimized performance and deployment via Docker"
+    ],
+    "stack": [
+      "React",
+      "Next.js",
+      "Node.js",
+      "Docker",
+      "Tailwind CSS",
+      "React Testing Library"
+    ]
+  },
+  {
+    "companyKey": "chiatk-crypto",
+    "company": "Chiatk (Crypto Fintech)",
+    "role": "Front-end Developer",
+    "period": "May 2021 – Jan 2023",
+    "location": "Remote",
+    "summary": "Developed and maintained secure landing pages for a cryptocurrency fintech using React, Vue.js and Electron, with real-time market content updates.",
+    "metrics": [
+      "Real-time market content for crypto landing pages",
+      "Collaboration with design and marketing on user-engagement experiences"
+    ],
+    "stack": ["React", "Vue.js", "Electron", "JavaScript"]
+  },
+  {
+    "companyKey": "oktana-salesforce",
+    "company": "Oktana Corporation (Salesforce ecosystem)",
+    "role": "Full-Stack Engineer",
+    "period": "Nov 2018 – Feb 2022",
+    "location": "Paraguay",
+    "summary": "Engineered enterprise solutions on top of Salesforce CRM for international clients, delivering web, mobile and desktop products with Apex, React, React Native, Webpack and Electron.",
+    "metrics": [
+      "Multidisciplinary international team using agile methodologies",
+      "Cross-platform mobile + desktop delivery via React Native and Electron"
+    ],
+    "stack": [
+      "Salesforce Apex",
+      "React",
+      "React Native",
+      "Electron",
+      "Webpack",
+      "JavaScript"
+    ]
+  }
+]

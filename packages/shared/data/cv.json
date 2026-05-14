@@ -1,0 +1,14 @@
+{
+  "name": "Nery Alberto Cano Ortigoza",
+  "tagline": "Senior Full-Stack Engineer (7+ yrs) shipping AI-powered web and mobile apps with Next.js, React Native and Anthropic Claude.",
+  "location": "Lambaré, Paraguay",
+  "remote": true,
+  "salaryFromUsd": 3500,
+  "yearsOfExperience": 7,
+  "contact": {
+    "email": "nalbertoc132@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/nery-cano-dev/",
+    "github": "https://github.com/NeryC",
+    "portfolio": "https://neryc.github.io/nery-cano-portfolio/"
+  }
+}
