@@ -1,0 +1,53 @@
+[
+  {
+    "slug": "research-agent",
+    "title": "Research Agent",
+    "tagline": "Multi-step web research with streaming UI and source citations.",
+    "tags": ["ai", "agents", "nextjs", "vercel-ai-sdk", "tool-use"],
+    "githubUrl": "https://github.com/NeryC/research-agent",
+    "demoUrl": "https://research-agent-three-pi.vercel.app",
+    "year": 2026,
+    "role": "Solo builder",
+    "stack": ["Next.js 16", "TypeScript", "AI SDK v6", "Exa API", "shadcn/ui", "Tailwind v4"],
+    "highlights": [
+      "ToolLoopAgent with stopWhen(stepCountIs(8))",
+      "Streaming tool-call timeline UI",
+      "Markdown answer with verifiable source cards",
+      "IP rate limiting (5 req/IP/hour)"
+    ]
+  },
+  {
+    "slug": "multi-agent-code-reviewer",
+    "title": "Multi-Agent Code Reviewer",
+    "tagline": "Parallel Security/Performance/Style agents reviewing diffs with a Sonnet supervisor.",
+    "tags": ["ai", "agents", "multi-agent", "structured-output", "sse"],
+    "githubUrl": "https://github.com/NeryC/multi-agent-code-reviewer",
+    "demoUrl": "https://multi-agent-code-reviewer-sable.vercel.app",
+    "year": 2026,
+    "role": "Solo builder",
+    "stack": ["Next.js 16", "TypeScript", "AI SDK v6", "Zod", "SSE", "shadcn/ui"],
+    "highlights": [
+      "3 specialized reviewer agents (Haiku) in parallel",
+      "Supervisor agent (Sonnet) aggregates findings",
+      "Structured output via Zod (Finding[], ReviewReport)",
+      "Per-agent SSE progress timeline UI"
+    ]
+  },
+  {
+    "slug": "rag-agent-memory",
+    "title": "RAG Agent with Memory",
+    "tagline": "PDF → pgvector → chat with citations + dual memory (short and long term).",
+    "tags": ["ai", "rag", "vector-db", "embeddings", "memory", "pgvector"],
+    "githubUrl": "https://github.com/NeryC/rag-agent-memory",
+    "demoUrl": "https://rag-agent-memory.vercel.app",
+    "year": 2026,
+    "role": "Solo builder",
+    "stack": ["Next.js 16", "Supabase pgvector", "Voyage AI", "Claude Sonnet 4.6", "Exa fallback"],
+    "highlights": [
+      "Zero-dep PDF parser (zlib + regex, no pdfjs-dist)",
+      "Synchronous ingest within Vercel Hobby 10s limit",
+      "Dual memory: pgvector chunks + Haiku-extracted long-term facts",
+      "Anonymous sessions via HttpOnly cookie, 24h expiry"
+    ]
+  }
+]
