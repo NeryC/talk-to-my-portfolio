@@ -1,0 +1,46 @@
+{
+  "syncedAt": "2026-05-14T00:00:00.000Z",
+  "source": "mock-seed-pre-sync",
+  "courses": [
+    {
+      "slug": "curso-de-typescript",
+      "title": "Curso de TypeScript",
+      "completedAt": "2023-04-12T00:00:00.000Z",
+      "hours": 10,
+      "skills": ["typescript", "javascript"],
+      "diplomaUrl": "https://platzi.com/p/neryc/curso/typescript/diploma/detalle/"
+    },
+    {
+      "slug": "curso-profesional-de-react",
+      "title": "Curso Profesional de React.js",
+      "completedAt": "2023-05-20T00:00:00.000Z",
+      "hours": 12,
+      "skills": ["react", "frontend"],
+      "diplomaUrl": "https://platzi.com/p/neryc/curso/react/diploma/detalle/"
+    },
+    {
+      "slug": "curso-de-nodejs",
+      "title": "Curso de Node.js",
+      "completedAt": "2023-03-01T00:00:00.000Z",
+      "hours": 8,
+      "skills": ["nodejs", "backend"],
+      "diplomaUrl": "https://platzi.com/p/neryc/curso/nodejs/diploma/detalle/"
+    },
+    {
+      "slug": "curso-de-nextjs",
+      "title": "Curso Profesional de Next.js",
+      "completedAt": "2023-09-15T00:00:00.000Z",
+      "hours": 14,
+      "skills": ["nextjs", "react", "frontend"],
+      "diplomaUrl": "https://platzi.com/p/neryc/curso/nextjs/diploma/detalle/"
+    },
+    {
+      "slug": "curso-de-postgresql",
+      "title": "Curso de Bases de Datos con PostgreSQL",
+      "completedAt": "2023-02-10T00:00:00.000Z",
+      "hours": 9,
+      "skills": ["postgresql", "sql", "backend"],
+      "diplomaUrl": "https://platzi.com/p/neryc/curso/postgresql/diploma/detalle/"
+    }
+  ]
+}

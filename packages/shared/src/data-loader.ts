@@ -6,6 +6,7 @@ import { ProjectSummarySchema, type ProjectSummary } from "./schemas/project.js"
 import { ExperienceSchema, type Experience } from "./schemas/experience.js";
 import { SkillSchema, type Skill } from "./schemas/skill.js";
 import { CvSchema, type Cv } from "./schemas/cv.js";
+import { CourseFileSchema, type CourseFile } from "./schemas/course.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(__dirname, "..", "data");
@@ -49,4 +50,9 @@ export function loadCv(): Cv {
 
 export function loadCvMarkdown(): string {
   return readFileSync(join(DATA_DIR, "cv.md"), "utf-8");
+}
+
+export function loadCourses(): CourseFile {
+  const raw = readFileSync(join(DATA_DIR, "courses.json"), "utf-8");
+  return CourseFileSchema.parse(JSON.parse(raw));
 }

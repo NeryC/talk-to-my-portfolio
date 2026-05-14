@@ -89,3 +89,28 @@ describe("loadCvMarkdown", () => {
     expect(md.length).toBeGreaterThan(500);
   });
 });
+
+import { loadCourses } from "../data-loader.js";
+
+describe("loadCourses", () => {
+  it("loads validated courses file with source metadata", () => {
+    const file = loadCourses();
+    expect(file.source).toBeDefined();
+    expect(typeof file.syncedAt).toBe("string");
+    expect(Array.isArray(file.courses)).toBe(true);
+  });
+
+  it("returns at least 3 mock courses (placeholder data)", () => {
+    const file = loadCourses();
+    expect(file.courses.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it("each course has a slug, title, and diplomaUrl", () => {
+    const file = loadCourses();
+    for (const c of file.courses) {
+      expect(c.slug).toMatch(/^[a-z0-9-]+$/);
+      expect(c.title.length).toBeGreaterThan(0);
+      expect(c.diplomaUrl).toMatch(/^https?:\/\//);
+    }
+  });
+});
