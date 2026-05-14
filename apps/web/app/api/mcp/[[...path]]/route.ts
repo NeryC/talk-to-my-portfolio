@@ -11,7 +11,7 @@ import {
 // and the SDK's streaming primitives).
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
-export const maxDuration = 800;
+export const maxDuration = 300;
 
 function buildServer(): Server {
   const server = new Server(

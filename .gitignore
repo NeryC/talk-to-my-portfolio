@@ -16,3 +16,5 @@ test-results/
 Thumbs.db
 dev.log
 dev.err
+
+.vercel
