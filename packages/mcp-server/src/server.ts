@@ -18,6 +18,7 @@ import { getSkillsTool } from "./tools/get-skills.js";
 import { getExperienceTool } from "./tools/get-experience.js";
 import { searchCoursesTool } from "./tools/search-courses.js";
 import { getCourseTool } from "./tools/get-course.js";
+import { getAvailabilityTool } from "./tools/get-availability.js";
 import { bookCallTool } from "./tools/book-call.js";
 import type { AnyTool } from "./tools/types.js";
 import { listResources, readResource } from "./resources/index.js";
@@ -56,6 +57,7 @@ export function buildServer(): BuiltServer {
     getExperienceTool,
     searchCoursesTool,
     getCourseTool,
+    getAvailabilityTool,
     bookCallTool,
   ];
 
