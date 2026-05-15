@@ -13,16 +13,17 @@ import { dirname, join } from "node:path";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { listProjectsTool } from "./tools/list-projects.js";
 import { getProjectTool } from "./tools/get-project.js";
-import { searchByTechTool, configureSearchByTech } from "./tools/search-by-tech.js";
+import { searchByTechTool } from "./tools/search-by-tech.js";
 import { getSkillsTool } from "./tools/get-skills.js";
 import { getExperienceTool } from "./tools/get-experience.js";
 import { searchCoursesTool } from "./tools/search-courses.js";
 import { getCourseTool } from "./tools/get-course.js";
-import { bookCallTool, configureBookCall } from "./tools/book-call.js";
+import { bookCallTool } from "./tools/book-call.js";
 import type { AnyTool } from "./tools/types.js";
 import { listResources, readResource } from "./resources/index.js";
-import { listPrompts, getPrompt, configurePrompts } from "./prompts/index.js";
-import type { SamplingBridge, ElicitationBridge } from "./prompts/_helpers.js";
+import { listPrompts, getPrompt } from "./prompts/index.js";
+import type { SamplingBridge, ElicitationBridge } from "./bridges.js";
+import { configureBridges } from "./bridge-state.js";
 
 const pkg = JSON.parse(
   readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "package.json"), "utf-8")
@@ -130,22 +131,12 @@ export function buildServer(): BuiltServer {
 
   const configure = () => {
     const caps = getCaps();
-    configurePrompts({
+    configureBridges({
       samplingBridge: caps.clientSupportsSampling ? samplingBridge : null,
       elicitationBridge: caps.clientSupportsElicitation
         ? elicitationBridge
         : null,
       clientSupportsSampling: caps.clientSupportsSampling,
-      clientSupportsElicitation: caps.clientSupportsElicitation,
-    });
-    configureSearchByTech({
-      samplingBridge: caps.clientSupportsSampling ? samplingBridge : null,
-      clientSupportsSampling: caps.clientSupportsSampling,
-    });
-    configureBookCall({
-      elicitationBridge: caps.clientSupportsElicitation
-        ? elicitationBridge
-        : null,
       clientSupportsElicitation: caps.clientSupportsElicitation,
     });
   };

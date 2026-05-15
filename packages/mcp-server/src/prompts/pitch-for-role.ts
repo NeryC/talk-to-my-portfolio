@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { loadProjects } from "@neryc/portfolio-shared";
 import { withTimeoutAndRetry } from "./_helpers.js";
-import type { SamplingBridge } from "./_helpers.js";
+import type { SamplingBridge } from "../bridges.js";
 
 const argsSchema = z.object({
   roleDescription: z.string().min(1),

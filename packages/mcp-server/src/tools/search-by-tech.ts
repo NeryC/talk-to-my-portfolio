@@ -2,7 +2,8 @@ import { z } from "zod";
 import { loadProjects, loadCourses, loadExperience } from "@neryc/portfolio-shared";
 import type { Tool } from "./types.js";
 import { withTimeoutAndRetry } from "../prompts/_helpers.js";
-import type { SamplingBridge } from "../prompts/_helpers.js";
+import type { SamplingBridge } from "../bridges.js";
+import { getBridgeState } from "../bridge-state.js";
 
 export const searchByTechInputSchema = z.object({
   tech: z.string().min(1),
@@ -114,26 +115,16 @@ Experience: ${experienceOut.map((e) => e.companyKey).join(", ")}`;
   return result;
 }
 
-let _samplingBridge: SamplingBridge | null = null;
-let _clientSupportsSampling = false;
-
-export function configureSearchByTech(opts: {
-  samplingBridge: SamplingBridge | null;
-  clientSupportsSampling: boolean;
-}) {
-  _samplingBridge = opts.samplingBridge;
-  _clientSupportsSampling = opts.clientSupportsSampling;
-}
-
 export const searchByTechTool: Tool<typeof searchByTechInputSchema> = {
   name: "searchByTech",
   description:
     "Find Nery's evidence (projects + courses + jobs) for a given technology. Use when a recruiter asks 'do you know X?' or 'show me where you used X'. Match is case-insensitive across tags, skills, and stack.",
   inputSchema: searchByTechInputSchema,
   async execute(args) {
+    const s = getBridgeState();
     return runSearchByTech(args, {
-      samplingBridge: _samplingBridge,
-      clientSupportsSampling: _clientSupportsSampling,
+      samplingBridge: s.samplingBridge,
+      clientSupportsSampling: s.clientSupportsSampling,
     });
   },
 };

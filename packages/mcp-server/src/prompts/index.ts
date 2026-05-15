@@ -1,7 +1,7 @@
 import { runPitchForRole } from "./pitch-for-role.js";
 import { runTechDeepDive } from "./tech-deep-dive.js";
 import { runCompareWithJd } from "./compare-with-jd.js";
-import type { SamplingBridge, ElicitationBridge } from "./_helpers.js";
+import { getBridgeState } from "../bridge-state.js";
 
 export interface PromptMeta {
   name: string;
@@ -42,23 +42,6 @@ export async function listPrompts() {
   return { prompts: promptsMeta };
 }
 
-let _samplingBridge: SamplingBridge | null = null;
-let _clientSupportsSampling = false;
-let _elicitationBridge: ElicitationBridge | null = null;
-let _clientSupportsElicitation = false;
-
-export function configurePrompts(opts: {
-  samplingBridge: SamplingBridge | null;
-  elicitationBridge: ElicitationBridge | null;
-  clientSupportsSampling: boolean;
-  clientSupportsElicitation: boolean;
-}) {
-  _samplingBridge = opts.samplingBridge;
-  _elicitationBridge = opts.elicitationBridge;
-  _clientSupportsSampling = opts.clientSupportsSampling;
-  _clientSupportsElicitation = opts.clientSupportsElicitation;
-}
-
 export async function getPrompt({
   name,
   arguments: args,
@@ -67,23 +50,26 @@ export async function getPrompt({
   arguments: Record<string, unknown>;
 }) {
   if (name === "pitch-for-role") {
+    const s = getBridgeState();
     return runPitchForRole(args, {
-      samplingBridge: _samplingBridge,
-      clientSupportsSampling: _clientSupportsSampling,
+      samplingBridge: s.samplingBridge,
+      clientSupportsSampling: s.clientSupportsSampling,
     });
   }
   if (name === "compare-with-jd") {
+    const s = getBridgeState();
     return runCompareWithJd(args, {
-      samplingBridge: _samplingBridge,
-      clientSupportsSampling: _clientSupportsSampling,
-      elicitationBridge: _elicitationBridge,
-      clientSupportsElicitation: _clientSupportsElicitation,
+      samplingBridge: s.samplingBridge,
+      clientSupportsSampling: s.clientSupportsSampling,
+      elicitationBridge: s.elicitationBridge,
+      clientSupportsElicitation: s.clientSupportsElicitation,
     });
   }
   if (name === "tech-deep-dive") {
+    const s = getBridgeState();
     return runTechDeepDive(args, {
-      samplingBridge: _samplingBridge,
-      clientSupportsSampling: _clientSupportsSampling,
+      samplingBridge: s.samplingBridge,
+      clientSupportsSampling: s.clientSupportsSampling,
     });
   }
   throw new Error(`unknown prompt: ${name}`);

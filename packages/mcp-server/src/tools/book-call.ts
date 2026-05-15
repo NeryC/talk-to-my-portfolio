@@ -1,7 +1,8 @@
 import { z } from "zod";
 import type { Tool } from "./types.js";
 import { stubCalComClient, type CalComClient } from "../integrations/cal-com.js";
-import type { ElicitationBridge } from "../prompts/_helpers.js";
+import type { ElicitationBridge } from "../bridges.js";
+import { getBridgeState } from "../bridge-state.js";
 
 export const bookCallInputSchema = z.object({
   name: z.string().min(1),
@@ -106,26 +107,16 @@ export async function runBookCall(
   throw new Error("booking failed after 3 attempts");
 }
 
-let _elicitationBridge: ElicitationBridge | null = null;
-let _clientSupportsElicitation = false;
-
-export function configureBookCall(opts: {
-  elicitationBridge: ElicitationBridge | null;
-  clientSupportsElicitation: boolean;
-}) {
-  _elicitationBridge = opts.elicitationBridge;
-  _clientSupportsElicitation = opts.clientSupportsElicitation;
-}
-
 export const bookCallTool: Tool<typeof bookCallInputSchema> = {
   name: "bookCall",
   description:
     "Book a 30-minute intro call with Nery. If email, slotId, or role are missing, the server will elicit them from the user. Use after the recruiter expresses interest.",
   inputSchema: bookCallInputSchema,
   async execute(args) {
+    const s = getBridgeState();
     return runBookCall(args, {
-      elicitationBridge: _elicitationBridge,
-      clientSupportsElicitation: _clientSupportsElicitation,
+      elicitationBridge: s.elicitationBridge,
+      clientSupportsElicitation: s.clientSupportsElicitation,
     });
   },
 };

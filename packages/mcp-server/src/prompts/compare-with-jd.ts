@@ -5,7 +5,7 @@ import {
   loadExperience,
 } from "@neryc/portfolio-shared";
 import { withTimeoutAndRetry } from "./_helpers.js";
-import type { SamplingBridge, ElicitationBridge } from "./_helpers.js";
+import type { SamplingBridge, ElicitationBridge } from "../bridges.js";
 
 const argsSchema = z.object({
   jobDescription: z.string().min(1),
