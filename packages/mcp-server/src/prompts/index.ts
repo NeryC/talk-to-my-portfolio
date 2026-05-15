@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { runPitchForRole } from "./pitch-for-role.js";
+import type { SamplingBridge } from "./_helpers.js";
 
 export interface PromptMeta {
   name: string;
@@ -44,11 +45,6 @@ const argsSchemas = {
   "compare-with-jd": z.object({ jobDescription: z.string().min(1) }),
   "tech-deep-dive": z.object({ tech: z.string().min(1) }),
 };
-
-type SamplingBridge = (req: {
-  messages: { role: "user"; content: { type: "text"; text: string } }[];
-  maxTokens: number;
-}) => Promise<{ content: { type: "text"; text: string } }>;
 
 let _samplingBridge: SamplingBridge | null = null;
 let _clientSupportsSampling = false;

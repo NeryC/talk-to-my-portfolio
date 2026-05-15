@@ -1,18 +1,13 @@
 import { z } from "zod";
 import { loadProjects } from "@neryc/portfolio-shared";
+import { withTimeoutAndRetry } from "./_helpers.js";
+import type { SamplingBridge } from "./_helpers.js";
 
 const argsSchema = z.object({
   roleDescription: z.string().min(1),
   companyName: z.string().optional(),
   stack: z.string().optional(),
 });
-
-export interface SamplingBridge {
-  (req: {
-    messages: { role: "user"; content: { type: "text"; text: string } }[];
-    maxTokens: number;
-  }): Promise<{ content: { type: "text"; text: string } }>;
-}
 
 export interface RunOptions {
   samplingBridge?: SamplingBridge | null;
@@ -85,25 +80,4 @@ Call \`bookCall\` to schedule a 30-minute intro.`,
       },
     ],
   };
-}
-
-async function withTimeoutAndRetry(
-  fn: () => Promise<{ content: { type: "text"; text: string } }>,
-  opts: { timeoutMs: number; retries: number }
-): Promise<string | null> {
-  for (let attempt = 0; attempt <= opts.retries; attempt++) {
-    try {
-      const result = await Promise.race([
-        fn(),
-        new Promise<never>((_, rej) =>
-          setTimeout(() => rej(new Error("timeout")), opts.timeoutMs)
-        ),
-      ]);
-      const text = result.content.text.trim();
-      if (text.length > 0) return text;
-    } catch {
-      /* fall through to retry or fallback */
-    }
-  }
-  return null;
 }
