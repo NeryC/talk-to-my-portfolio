@@ -1,4 +1,4 @@
-import { getMcpTransport } from "../../../../lib/mcp-server-instance.js";
+import { getMcpTransport } from "../../../../lib/mcp-server-instance";
 
 // Next.js 16 App Router route handler config.
 // The MCP Streamable HTTP transport may stream SSE responses, so we disable
