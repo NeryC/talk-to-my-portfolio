@@ -1,8 +1,23 @@
 import { z } from "zod";
 import type { Tool } from "./types.js";
 import { stubCalComClient, type CalComClient } from "../integrations/cal-com.js";
+import { CalComRealClient } from "../integrations/cal-com.real.js";
 import type { ElicitationBridge } from "../bridges.js";
 import { getBridgeState } from "../bridge-state.js";
+import { parseEnv } from "../env.js";
+
+let _calComClient: CalComClient | undefined;
+
+function getCalComClient(): CalComClient {
+  if (_calComClient) return _calComClient;
+  const env = parseEnv();
+  _calComClient = new CalComRealClient({
+    apiKey: env.CAL_COM_API_KEY,
+    eventTypeId: env.CAL_COM_EVENT_TYPE_ID,
+    username: env.CAL_COM_USERNAME,
+  });
+  return _calComClient;
+}
 
 export const bookCallInputSchema = z.object({
   name: z.string().min(1),
@@ -117,6 +132,7 @@ export const bookCallTool: Tool<typeof bookCallInputSchema> = {
     return runBookCall(args, {
       elicitationBridge: s.elicitationBridge,
       clientSupportsElicitation: s.clientSupportsElicitation,
+      calCom: getCalComClient(),
     });
   },
 };
