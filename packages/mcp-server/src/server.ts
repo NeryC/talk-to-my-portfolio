@@ -2,6 +2,8 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
+  ListResourcesRequestSchema,
+  ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -15,6 +17,7 @@ import { getExperienceTool } from "./tools/get-experience.js";
 import { searchCoursesTool } from "./tools/search-courses.js";
 import { getCourseTool } from "./tools/get-course.js";
 import type { AnyTool } from "./tools/types.js";
+import { listResources, readResource } from "./resources/index.js";
 
 const pkg = JSON.parse(
   readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "package.json"), "utf-8")
@@ -59,6 +62,12 @@ export function buildServer(): BuiltServer {
     const parsed = tool.inputSchema.parse(req.params.arguments ?? {});
     const result = await tool.execute(parsed);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  });
+
+  server.setRequestHandler(ListResourcesRequestSchema, async () => listResources());
+  server.setRequestHandler(ReadResourceRequestSchema, async (req) => {
+    const r = await readResource(req.params.uri);
+    return { contents: [{ uri: r.uri, mimeType: r.mimeType, text: r.text }] };
   });
 
   return { server, serverInfo, capabilities };
