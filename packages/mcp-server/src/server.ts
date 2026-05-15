@@ -18,6 +18,7 @@ import { getSkillsTool } from "./tools/get-skills.js";
 import { getExperienceTool } from "./tools/get-experience.js";
 import { searchCoursesTool } from "./tools/search-courses.js";
 import { getCourseTool } from "./tools/get-course.js";
+import { bookCallTool, configureBookCall } from "./tools/book-call.js";
 import type { AnyTool } from "./tools/types.js";
 import { listResources, readResource } from "./resources/index.js";
 import { listPrompts, getPrompt, configurePrompts } from "./prompts/index.js";
@@ -54,6 +55,7 @@ export function buildServer(): BuiltServer {
     getExperienceTool,
     searchCoursesTool,
     getCourseTool,
+    bookCallTool,
   ];
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
@@ -139,6 +141,12 @@ export function buildServer(): BuiltServer {
     configureSearchByTech({
       samplingBridge: caps.clientSupportsSampling ? samplingBridge : null,
       clientSupportsSampling: caps.clientSupportsSampling,
+    });
+    configureBookCall({
+      elicitationBridge: caps.clientSupportsElicitation
+        ? elicitationBridge
+        : null,
+      clientSupportsElicitation: caps.clientSupportsElicitation,
     });
   };
 
