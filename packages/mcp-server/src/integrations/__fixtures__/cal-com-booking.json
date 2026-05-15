@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "data": {
+    "id": 987654,
+    "uid": "abc123def456",
+    "title": "30 min meeting between Nery Cano and Recruiter",
+    "startTime": "2026-06-01T10:00:00.000Z",
+    "endTime": "2026-06-01T10:30:00.000Z",
+    "attendees": [{ "email": "r@a.com", "name": "Recruiter" }],
+    "eventType": { "id": 123, "slug": "30min" }
+  }
+}
