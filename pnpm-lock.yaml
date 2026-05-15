@@ -32,6 +32,9 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.0.0
         version: 1.29.0(zod@3.25.76)
+      '@neryc/portfolio-mcp':
+        specifier: workspace:^
+        version: link:../../packages/mcp-server
       '@neryc/portfolio-shared':
         specifier: workspace:*
         version: link:../../packages/shared
