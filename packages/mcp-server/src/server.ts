@@ -20,7 +20,8 @@ import { searchCoursesTool } from "./tools/search-courses.js";
 import { getCourseTool } from "./tools/get-course.js";
 import type { AnyTool } from "./tools/types.js";
 import { listResources, readResource } from "./resources/index.js";
-import { listPrompts, getPrompt } from "./prompts/index.js";
+import { listPrompts, getPrompt, configurePrompts } from "./prompts/index.js";
+import type { SamplingBridge, ElicitationBridge } from "./prompts/_helpers.js";
 
 const pkg = JSON.parse(
   readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "package.json"), "utf-8")
@@ -30,6 +31,10 @@ export interface BuiltServer {
   server: Server;
   serverInfo: { name: string; version: string };
   capabilities: Record<string, unknown>;
+  getConfiguredPromptOptions: () => {
+    clientSupportsSampling: boolean;
+    clientSupportsElicitation: boolean;
+  };
 }
 
 export function buildServer(): BuiltServer {
@@ -78,5 +83,77 @@ export function buildServer(): BuiltServer {
     getPrompt({ name: req.params.name, arguments: req.params.arguments ?? {} })
   );
 
-  return { server, serverInfo, capabilities };
+  // Bridges from our prompt code to the SDK's client-facing APIs.
+  const samplingBridge: SamplingBridge = async (req) => {
+    const r = await server.createMessage({
+      messages: req.messages,
+      maxTokens: req.maxTokens,
+    });
+    // SDK returns a discriminated union (text|image|audio); we only handle text.
+    if (r.content && (r.content as { type?: string }).type === "text") {
+      const text = (r.content as { type: "text"; text: string }).text;
+      return { content: { type: "text", text } };
+    }
+    return { content: { type: "text", text: "" } };
+  };
+
+  const elicitationBridge: ElicitationBridge = async (req) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const r = await server.elicitInput({
+      message: req.message,
+      requestedSchema: req.requestedSchema as never,
+    });
+    return {
+      action: r.action as "accept" | "decline" | "cancel",
+      content: r.content,
+    };
+  };
+
+  const getCaps = () => {
+    // Prefer the public SDK method; fall back to the private field for
+    // resilience (and to support tests that poke `_clientCapabilities`).
+    const cc =
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (typeof (server as any).getClientCapabilities === "function" &&
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (server as any).getClientCapabilities()) ||
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (server as any)._clientCapabilities ||
+      {};
+    return {
+      clientSupportsSampling: !!cc.sampling,
+      clientSupportsElicitation: !!cc.elicitation,
+    };
+  };
+
+  const configure = () => {
+    const caps = getCaps();
+    configurePrompts({
+      samplingBridge: caps.clientSupportsSampling ? samplingBridge : null,
+      elicitationBridge: caps.clientSupportsElicitation
+        ? elicitationBridge
+        : null,
+      clientSupportsSampling: caps.clientSupportsSampling,
+      clientSupportsElicitation: caps.clientSupportsElicitation,
+    });
+  };
+
+  // Re-configure after every initialize handshake. SDK 1.29.0 exposes
+  // `oninitialized` (lowercase i) as a public callback.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (typeof (server as any).oninitialized !== "undefined") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (server as any).oninitialized = configure;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } else if (typeof (server as any).onInitialized !== "undefined") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (server as any).onInitialized = configure;
+  }
+
+  return {
+    server,
+    serverInfo,
+    capabilities,
+    getConfiguredPromptOptions: getCaps,
+  };
 }

@@ -1,7 +1,7 @@
 import { runPitchForRole } from "./pitch-for-role.js";
 import { runTechDeepDive } from "./tech-deep-dive.js";
 import { runCompareWithJd } from "./compare-with-jd.js";
-import type { SamplingBridge } from "./_helpers.js";
+import type { SamplingBridge, ElicitationBridge } from "./_helpers.js";
 
 export interface PromptMeta {
   name: string;
@@ -44,13 +44,19 @@ export async function listPrompts() {
 
 let _samplingBridge: SamplingBridge | null = null;
 let _clientSupportsSampling = false;
+let _elicitationBridge: ElicitationBridge | null = null;
+let _clientSupportsElicitation = false;
 
 export function configurePrompts(opts: {
   samplingBridge: SamplingBridge | null;
+  elicitationBridge: ElicitationBridge | null;
   clientSupportsSampling: boolean;
+  clientSupportsElicitation: boolean;
 }) {
   _samplingBridge = opts.samplingBridge;
+  _elicitationBridge = opts.elicitationBridge;
   _clientSupportsSampling = opts.clientSupportsSampling;
+  _clientSupportsElicitation = opts.clientSupportsElicitation;
 }
 
 export async function getPrompt({
@@ -70,6 +76,8 @@ export async function getPrompt({
     return runCompareWithJd(args, {
       samplingBridge: _samplingBridge,
       clientSupportsSampling: _clientSupportsSampling,
+      elicitationBridge: _elicitationBridge,
+      clientSupportsElicitation: _clientSupportsElicitation,
     });
   }
   if (name === "tech-deep-dive") {
