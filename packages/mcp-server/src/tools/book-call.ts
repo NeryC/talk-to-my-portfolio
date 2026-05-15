@@ -1,7 +1,12 @@
 import { z } from "zod";
+import { Resend } from "resend";
 import type { Tool } from "./types.js";
 import { stubCalComClient, type CalComClient } from "../integrations/cal-com.js";
 import { CalComRealClient } from "../integrations/cal-com.real.js";
+import {
+  sendBookingConfirmation,
+  type SendBookingConfirmationArgs,
+} from "../integrations/resend.js";
 import type { ElicitationBridge } from "../bridges.js";
 import { getBridgeState } from "../bridge-state.js";
 import { parseEnv } from "../env.js";
@@ -17,6 +22,17 @@ function getCalComClient(): CalComClient {
     username: env.CAL_COM_USERNAME,
   });
   return _calComClient;
+}
+
+let _resend: Resend | undefined;
+let _resendFrom: string | undefined;
+
+function getResend(): { resend: Resend; from: string } {
+  if (_resend && _resendFrom) return { resend: _resend, from: _resendFrom };
+  const env = parseEnv();
+  _resend = new Resend(env.RESEND_API_KEY);
+  _resendFrom = env.RESEND_FROM_EMAIL;
+  return { resend: _resend, from: _resendFrom };
 }
 
 export const bookCallInputSchema = z.object({
@@ -37,6 +53,11 @@ export interface RunOptions {
   elicitationBridge?: ElicitationBridge | null;
   clientSupportsElicitation?: boolean;
   calCom?: CalComClient;
+  resend?: { resend: Resend; from: string };
+  sendEmail?: (
+    args: SendBookingConfirmationArgs,
+    deps: { resend: Resend; from: string },
+  ) => Promise<unknown>;
 }
 
 const MAX_ELICITATION_ATTEMPTS = 3;
@@ -50,6 +71,24 @@ function findMissing(
   return REQUIRED_FIELDS.filter((k) => !parsed[k]);
 }
 
+async function maybeSendEmail(
+  opts: RunOptions,
+  args: SendBookingConfirmationArgs,
+): Promise<void> {
+  if (!opts.resend) return;
+  const sender = opts.sendEmail ?? sendBookingConfirmation;
+  try {
+    await sender(args, opts.resend);
+  } catch (err) {
+    // Email failure should NOT fail the booking. Log to stderr.
+    process.stderr.write(
+      `[portfolio-mcp] resend send failed: ${
+        err instanceof Error ? err.message : String(err)
+      }\n`,
+    );
+  }
+}
+
 export async function runBookCall(
   args: unknown,
   opts: RunOptions = {},
@@ -60,13 +99,21 @@ export async function runBookCall(
 
   if (missing.length === 0) {
     const valid = fullSchema.parse(parsed);
-    return cal.bookSlot({
+    const booking = await cal.bookSlot({
       slotId: valid.slotId,
       email: valid.email,
       name: valid.name,
       role: valid.role,
       message: valid.message,
     });
+    await maybeSendEmail(opts, {
+      to: valid.email,
+      name: valid.name,
+      role: valid.role,
+      bookingId: booking.bookingId,
+      confirmationUrl: booking.confirmationUrl,
+    });
+    return booking;
   }
 
   if (!opts.clientSupportsElicitation || !opts.elicitationBridge) {
@@ -108,13 +155,21 @@ export async function runBookCall(
     if (missing.length === 0) {
       const valid = fullSchema.safeParse(parsed);
       if (valid.success) {
-        return cal.bookSlot({
+        const booking = await cal.bookSlot({
           slotId: valid.data.slotId,
           email: valid.data.email,
           name: valid.data.name,
           role: valid.data.role,
           message: valid.data.message,
         });
+        await maybeSendEmail(opts, {
+          to: valid.data.email,
+          name: valid.data.name,
+          role: valid.data.role,
+          bookingId: booking.bookingId,
+          confirmationUrl: booking.confirmationUrl,
+        });
+        return booking;
       }
       // If full validation still fails, keep looping to re-prompt.
     }
@@ -133,6 +188,7 @@ export const bookCallTool: Tool<typeof bookCallInputSchema> = {
       elicitationBridge: s.elicitationBridge,
       clientSupportsElicitation: s.clientSupportsElicitation,
       calCom: getCalComClient(),
+      resend: getResend(),
     });
   },
 };
