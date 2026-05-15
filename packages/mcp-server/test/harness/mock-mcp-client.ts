@@ -1,33 +1,37 @@
-interface SamplingRequest {
+export interface SamplingRequest {
   messages: { role: "user" | "assistant"; content: { type: "text"; text: string } }[];
   maxTokens: number;
   modelPreferences?: unknown;
 }
-interface SamplingResponse {
+export interface SamplingResponse {
   content: { type: "text"; text: string };
   model?: string;
   stopReason?: string;
 }
 
-interface ElicitationRequest {
+export interface ElicitationRequest {
   message: string;
   requestedSchema: Record<string, unknown>;
 }
-interface ElicitationResponse {
+export interface ElicitationResponse {
   action: "accept" | "decline" | "cancel";
   content?: Record<string, unknown>;
 }
 
-interface Capabilities {
+export interface Capabilities {
   sampling?: object;
   elicitation?: object;
 }
+
+export type RecordedRequest =
+  | { kind: "sampling"; payload: SamplingRequest }
+  | { kind: "elicitation"; payload: ElicitationRequest };
 
 export class MockMcpClient {
   private capabilities: Capabilities;
   private samplingHandler?: (req: SamplingRequest) => Promise<SamplingResponse>;
   private elicitationHandler?: (req: ElicitationRequest) => Promise<ElicitationResponse>;
-  private recorded: { kind: "sampling" | "elicitation"; payload: unknown }[] = [];
+  private recorded: RecordedRequest[] = [];
 
   constructor(opts: { capabilities: Capabilities }) {
     this.capabilities = opts.capabilities;
@@ -60,7 +64,7 @@ export class MockMcpClient {
     return this.elicitationHandler(req);
   }
 
-  getRecordedRequests() {
+  getRecordedRequests(): RecordedRequest[] {
     return [...this.recorded];
   }
   clearRecorded() {
