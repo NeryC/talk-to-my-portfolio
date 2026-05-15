@@ -10,6 +10,10 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import { listProjectsTool } from "./tools/list-projects.js";
 import { getProjectTool } from "./tools/get-project.js";
 import { searchByTechTool } from "./tools/search-by-tech.js";
+import { getSkillsTool } from "./tools/get-skills.js";
+import { getExperienceTool } from "./tools/get-experience.js";
+import { searchCoursesTool } from "./tools/search-courses.js";
+import { getCourseTool } from "./tools/get-course.js";
 import type { AnyTool } from "./tools/types.js";
 
 const pkg = JSON.parse(
@@ -31,7 +35,15 @@ export function buildServer(): BuiltServer {
   };
   const server = new Server(serverInfo, { capabilities });
 
-  const tools: readonly AnyTool[] = [listProjectsTool, getProjectTool, searchByTechTool];
+  const tools: readonly AnyTool[] = [
+    listProjectsTool,
+    getProjectTool,
+    searchByTechTool,
+    getSkillsTool,
+    getExperienceTool,
+    searchCoursesTool,
+    getCourseTool,
+  ];
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
     tools: tools.map((t) => ({
