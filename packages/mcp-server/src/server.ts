@@ -4,6 +4,8 @@ import {
   ListToolsRequestSchema,
   ListResourcesRequestSchema,
   ReadResourceRequestSchema,
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -18,6 +20,7 @@ import { searchCoursesTool } from "./tools/search-courses.js";
 import { getCourseTool } from "./tools/get-course.js";
 import type { AnyTool } from "./tools/types.js";
 import { listResources, readResource } from "./resources/index.js";
+import { listPrompts, getPrompt } from "./prompts/index.js";
 
 const pkg = JSON.parse(
   readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "package.json"), "utf-8")
@@ -69,6 +72,11 @@ export function buildServer(): BuiltServer {
     const r = await readResource(req.params.uri);
     return { contents: [{ uri: r.uri, mimeType: r.mimeType, text: r.text }] };
   });
+
+  server.setRequestHandler(ListPromptsRequestSchema, async () => listPrompts());
+  server.setRequestHandler(GetPromptRequestSchema, async (req) =>
+    getPrompt({ name: req.params.name, arguments: req.params.arguments ?? {} })
+  );
 
   return { server, serverInfo, capabilities };
 }
