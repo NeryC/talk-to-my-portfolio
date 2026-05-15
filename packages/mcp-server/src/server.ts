@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { listProjectsTool } from "./tools/list-projects.js";
+import { getProjectTool } from "./tools/get-project.js";
 import type { AnyTool } from "./tools/types.js";
 
 const pkg = JSON.parse(
@@ -29,7 +30,7 @@ export function buildServer(): BuiltServer {
   };
   const server = new Server(serverInfo, { capabilities });
 
-  const tools: readonly AnyTool[] = [listProjectsTool];
+  const tools: readonly AnyTool[] = [listProjectsTool, getProjectTool];
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
     tools: tools.map((t) => ({
