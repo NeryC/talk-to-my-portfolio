@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { z } from "zod";
-import { ProjectSummarySchema, type ProjectSummary } from "./schemas/project.js";
+import { ProjectSummarySchema } from "./schemas/project.js";
 import { ExperienceSchema, type Experience } from "./schemas/experience.js";
 import { SkillSchema, type Skill } from "./schemas/skill.js";
 import { CvSchema, type Cv } from "./schemas/cv.js";
@@ -15,15 +15,16 @@ const ProjectExtendedSchema = ProjectSummarySchema.extend({
   stack: z.array(z.string()),
   highlights: z.array(z.string()),
 });
+export type ProjectListed = z.infer<typeof ProjectExtendedSchema>;
 
-let _projects: ProjectSummary[] | undefined;
+let _projects: ProjectListed[] | undefined;
 let _experience: Experience[] | undefined;
 let _skills: Skill[] | undefined;
 let _cv: Cv | undefined;
 let _cvMarkdown: string | undefined;
 let _courses: CourseFile | undefined;
 
-export function loadProjects(): ProjectSummary[] {
+export function loadProjects(): ProjectListed[] {
   if (_projects) return _projects;
   const raw = readFileSync(join(DATA_DIR, "projects", "_index.json"), "utf-8");
   _projects = z.array(ProjectExtendedSchema).parse(JSON.parse(raw));
