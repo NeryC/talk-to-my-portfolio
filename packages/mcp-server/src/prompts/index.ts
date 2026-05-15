@@ -1,5 +1,6 @@
-import { z } from "zod";
 import { runPitchForRole } from "./pitch-for-role.js";
+import { runTechDeepDive } from "./tech-deep-dive.js";
+import { runCompareWithJd } from "./compare-with-jd.js";
 import type { SamplingBridge } from "./_helpers.js";
 
 export interface PromptMeta {
@@ -41,11 +42,6 @@ export async function listPrompts() {
   return { prompts: promptsMeta };
 }
 
-const argsSchemas = {
-  "compare-with-jd": z.object({ jobDescription: z.string().min(1) }),
-  "tech-deep-dive": z.object({ tech: z.string().min(1) }),
-};
-
 let _samplingBridge: SamplingBridge | null = null;
 let _clientSupportsSampling = false;
 
@@ -71,37 +67,16 @@ export async function getPrompt({
     });
   }
   if (name === "compare-with-jd") {
-    const parsed = argsSchemas["compare-with-jd"].parse(args);
-    return {
-      description: "JD comparison",
-      messages: [
-        {
-          role: "user",
-          content: {
-            type: "text",
-            text: `Compare the JD below against Nery's portfolio. For each major requirement output a match score (strong / partial / none) and cite his evidence (projects/courses/experience). Conclude with a 2-line gap analysis.
-
-JD:
-${parsed.jobDescription}`,
-          },
-        },
-      ],
-    };
+    return runCompareWithJd(args, {
+      samplingBridge: _samplingBridge,
+      clientSupportsSampling: _clientSupportsSampling,
+    });
   }
   if (name === "tech-deep-dive") {
-    const parsed = argsSchemas["tech-deep-dive"].parse(args);
-    return {
-      description: "Tech deep dive",
-      messages: [
-        {
-          role: "user",
-          content: {
-            type: "text",
-            text: `Show Nery's experience with ${parsed.tech}: which projects used it (with slug), which Platzi courses cover it (with diploma URL), and at which employers he applied it. Cite everything precisely.`,
-          },
-        },
-      ],
-    };
+    return runTechDeepDive(args, {
+      samplingBridge: _samplingBridge,
+      clientSupportsSampling: _clientSupportsSampling,
+    });
   }
   throw new Error(`unknown prompt: ${name}`);
 }
