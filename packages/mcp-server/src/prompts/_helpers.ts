@@ -5,6 +5,16 @@ export interface SamplingBridge {
   }): Promise<{ content: { type: "text"; text: string } }>;
 }
 
+export interface ElicitationBridge {
+  (req: {
+    message: string;
+    requestedSchema: Record<string, unknown>;
+  }): Promise<{
+    action: "accept" | "decline" | "cancel";
+    content?: Record<string, unknown>;
+  }>;
+}
+
 export interface TimeoutRetryOptions {
   timeoutMs: number;
   retries: number;
