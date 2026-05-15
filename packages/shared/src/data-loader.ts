@@ -16,10 +16,18 @@ const ProjectExtendedSchema = ProjectSummarySchema.extend({
   highlights: z.array(z.string()),
 });
 
+let _projects: ProjectSummary[] | undefined;
+let _experience: Experience[] | undefined;
+let _skills: Skill[] | undefined;
+let _cv: Cv | undefined;
+let _cvMarkdown: string | undefined;
+let _courses: CourseFile | undefined;
+
 export function loadProjects(): ProjectSummary[] {
+  if (_projects) return _projects;
   const raw = readFileSync(join(DATA_DIR, "projects", "_index.json"), "utf-8");
-  const parsed = JSON.parse(raw);
-  return z.array(ProjectExtendedSchema).parse(parsed);
+  _projects = z.array(ProjectExtendedSchema).parse(JSON.parse(raw));
+  return _projects;
 }
 
 export function loadProjectCaseStudy(slug: string): string {
@@ -34,25 +42,45 @@ export function loadProjectCaseStudy(slug: string): string {
 }
 
 export function loadExperience(): Experience[] {
+  if (_experience) return _experience;
   const raw = readFileSync(join(DATA_DIR, "experience.json"), "utf-8");
-  return z.array(ExperienceSchema).parse(JSON.parse(raw));
+  _experience = z.array(ExperienceSchema).parse(JSON.parse(raw));
+  return _experience;
 }
 
 export function loadSkills(): Skill[] {
+  if (_skills) return _skills;
   const raw = readFileSync(join(DATA_DIR, "skills.json"), "utf-8");
-  return z.array(SkillSchema).parse(JSON.parse(raw));
+  _skills = z.array(SkillSchema).parse(JSON.parse(raw));
+  return _skills;
 }
 
 export function loadCv(): Cv {
+  if (_cv) return _cv;
   const raw = readFileSync(join(DATA_DIR, "cv.json"), "utf-8");
-  return CvSchema.parse(JSON.parse(raw));
+  _cv = CvSchema.parse(JSON.parse(raw));
+  return _cv;
 }
 
 export function loadCvMarkdown(): string {
-  return readFileSync(join(DATA_DIR, "cv.md"), "utf-8");
+  if (_cvMarkdown !== undefined) return _cvMarkdown;
+  _cvMarkdown = readFileSync(join(DATA_DIR, "cv.md"), "utf-8");
+  return _cvMarkdown;
 }
 
 export function loadCourses(): CourseFile {
+  if (_courses) return _courses;
   const raw = readFileSync(join(DATA_DIR, "courses.json"), "utf-8");
-  return CourseFileSchema.parse(JSON.parse(raw));
+  _courses = CourseFileSchema.parse(JSON.parse(raw));
+  return _courses;
+}
+
+/** Reset all loader caches. For tests only. */
+export function __resetDataLoaderCache(): void {
+  _projects = undefined;
+  _experience = undefined;
+  _skills = undefined;
+  _cv = undefined;
+  _cvMarkdown = undefined;
+  _courses = undefined;
 }
