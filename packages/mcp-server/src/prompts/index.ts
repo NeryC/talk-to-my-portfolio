@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { loadProjects } from "@neryc/portfolio-shared";
+import { runPitchForRole } from "./pitch-for-role.js";
 
 export interface PromptMeta {
   name: string;
@@ -41,14 +41,25 @@ export async function listPrompts() {
 }
 
 const argsSchemas = {
-  "pitch-for-role": z.object({
-    roleDescription: z.string().min(1),
-    companyName: z.string().optional(),
-    stack: z.string().optional(),
-  }),
   "compare-with-jd": z.object({ jobDescription: z.string().min(1) }),
   "tech-deep-dive": z.object({ tech: z.string().min(1) }),
 };
+
+type SamplingBridge = (req: {
+  messages: { role: "user"; content: { type: "text"; text: string } }[];
+  maxTokens: number;
+}) => Promise<{ content: { type: "text"; text: string } }>;
+
+let _samplingBridge: SamplingBridge | null = null;
+let _clientSupportsSampling = false;
+
+export function configurePrompts(opts: {
+  samplingBridge: SamplingBridge | null;
+  clientSupportsSampling: boolean;
+}) {
+  _samplingBridge = opts.samplingBridge;
+  _clientSupportsSampling = opts.clientSupportsSampling;
+}
 
 export async function getPrompt({
   name,
@@ -58,31 +69,10 @@ export async function getPrompt({
   arguments: Record<string, unknown>;
 }) {
   if (name === "pitch-for-role") {
-    const parsed = argsSchemas["pitch-for-role"].parse(args);
-    const projects = loadProjects()
-      .map((p) => `- ${p.slug}: ${p.tagline}`)
-      .join("\n");
-    return {
-      description: "Tailored pitch",
-      messages: [
-        {
-          role: "user",
-          content: {
-            type: "text",
-            text: `You are pitching Nery Cano (Senior Full-Stack Engineer, 7+ yrs) for the following role:
-
-ROLE: ${parsed.roleDescription}
-${parsed.companyName ? `COMPANY: ${parsed.companyName}` : ""}
-${parsed.stack ? `STACK: ${parsed.stack}` : ""}
-
-His relevant projects:
-${projects}
-
-Write a 180-word pitch citing concrete projects (by slug). Close with a CTA to call \`bookCall\`.`,
-          },
-        },
-      ],
-    };
+    return runPitchForRole(args, {
+      samplingBridge: _samplingBridge,
+      clientSupportsSampling: _clientSupportsSampling,
+    });
   }
   if (name === "compare-with-jd") {
     const parsed = argsSchemas["compare-with-jd"].parse(args);
