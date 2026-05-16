@@ -6,6 +6,7 @@ import {
   type NamedServer,
 } from "@/lib/mcp-client";
 import { rateLimit } from "@/lib/rate-limit";
+import { convertToModelMessages, type UIMessage } from "ai";
 import type { NextRequest } from "next/server";
 
 // Next.js 16 App Router route handler config.
@@ -47,8 +48,9 @@ export async function POST(req: NextRequest): Promise<Response> {
       { status: 429, headers: { "content-type": "application/json" } },
     );
   }
-  const { messages } = (await req.json()) as { messages: unknown };
+  const { messages } = (await req.json()) as { messages: UIMessage[] };
   const { agent } = await getAgentContext();
-  const result = await agent.stream({ messages: messages as never });
+  const modelMessages = await convertToModelMessages(messages);
+  const result = await agent.stream({ messages: modelMessages });
   return result.toUIMessageStreamResponse();
 }
