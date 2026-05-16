@@ -34,6 +34,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Build runs first so dependent packages (@neryc/portfolio-shared,
+      # @neryc/portfolio-mcp) produce dist/ output before downstream
+      # workspace projects typecheck against their published entry points
+      # (package.json `exports` → ./dist/...). Without this, sync-platzi
+      # and apps/web fail with TS2307 in a fresh CI checkout.
+      - name: Build
+        run: pnpm build
+
       - name: Type check
         run: pnpm typecheck
 
@@ -46,6 +54,3 @@ jobs:
 
       - name: Test
         run: pnpm test
-
-      - name: Build
-        run: pnpm build
