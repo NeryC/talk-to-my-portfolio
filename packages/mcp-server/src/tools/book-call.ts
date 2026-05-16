@@ -43,12 +43,6 @@ export const bookCallInputSchema = z.object({
   message: z.string().optional(),
 });
 
-const fullSchema = bookCallInputSchema.required({
-  email: true,
-  slotId: true,
-  role: true,
-});
-
 export interface RunOptions {
   elicitationBridge?: ElicitationBridge | null;
   clientSupportsElicitation?: boolean;
@@ -89,6 +83,30 @@ async function maybeSendEmail(
   }
 }
 
+// Precondition: findMissing(parsed) returned []. bookCallInputSchema has already
+// validated email format and non-empty role/slotId, so the `!` assertions are safe.
+async function completeBooking(
+  cal: CalComClient,
+  parsed: z.infer<typeof bookCallInputSchema>,
+  opts: RunOptions,
+): Promise<{ bookingId: string; confirmationUrl: string }> {
+  const booking = await cal.bookSlot({
+    slotId: parsed.slotId!,
+    email: parsed.email!,
+    name: parsed.name,
+    role: parsed.role!,
+    message: parsed.message,
+  });
+  await maybeSendEmail(opts, {
+    to: parsed.email!,
+    name: parsed.name,
+    role: parsed.role!,
+    bookingId: booking.bookingId,
+    confirmationUrl: booking.confirmationUrl,
+  });
+  return booking;
+}
+
 export async function runBookCall(
   args: unknown,
   opts: RunOptions = {},
@@ -98,22 +116,7 @@ export async function runBookCall(
   let missing = findMissing(parsed);
 
   if (missing.length === 0) {
-    const valid = fullSchema.parse(parsed);
-    const booking = await cal.bookSlot({
-      slotId: valid.slotId,
-      email: valid.email,
-      name: valid.name,
-      role: valid.role,
-      message: valid.message,
-    });
-    await maybeSendEmail(opts, {
-      to: valid.email,
-      name: valid.name,
-      role: valid.role,
-      bookingId: booking.bookingId,
-      confirmationUrl: booking.confirmationUrl,
-    });
-    return booking;
+    return completeBooking(cal, parsed, opts);
   }
 
   if (!opts.clientSupportsElicitation || !opts.elicitationBridge) {
@@ -153,25 +156,7 @@ export async function runBookCall(
     parsed = merged.data;
     missing = findMissing(parsed);
     if (missing.length === 0) {
-      const valid = fullSchema.safeParse(parsed);
-      if (valid.success) {
-        const booking = await cal.bookSlot({
-          slotId: valid.data.slotId,
-          email: valid.data.email,
-          name: valid.data.name,
-          role: valid.data.role,
-          message: valid.data.message,
-        });
-        await maybeSendEmail(opts, {
-          to: valid.data.email,
-          name: valid.data.name,
-          role: valid.data.role,
-          bookingId: booking.bookingId,
-          confirmationUrl: booking.confirmationUrl,
-        });
-        return booking;
-      }
-      // If full validation still fails, keep looping to re-prompt.
+      return completeBooking(cal, parsed, opts);
     }
   }
   throw new Error("booking failed after 3 attempts");

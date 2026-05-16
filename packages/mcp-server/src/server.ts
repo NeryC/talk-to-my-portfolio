@@ -145,6 +145,10 @@ export function buildServer(): BuiltServer {
 
   // Re-configure after every initialize handshake. SDK 1.29.0 exposes
   // `oninitialized` (lowercase i) as a public callback.
+  // Bridges are stored as global module state in bridge-state.ts (not per-session).
+  // In high-concurrency scenarios where two clients with different capabilities
+  // connect to the same warm worker, the latest initialize wins. Acceptable for the
+  // portfolio use case (1 session at a time).
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (typeof (server as any).oninitialized !== "undefined") {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -5,11 +5,11 @@ import type { Tool } from "./types.js";
 export const getAvailabilityInputSchema = z.object({
   from: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}/)
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
     .optional(),
   to: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}/)
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
     .optional(),
 });
 
