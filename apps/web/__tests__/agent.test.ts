@@ -9,6 +9,7 @@ vi.mock("ai", () => ({
   }),
   stepCountIs: vi.fn((n: number) => ({ kind: "stepCount", value: n })),
   tool: vi.fn((opts: Record<string, unknown>) => ({ kind: "tool", ...opts })),
+  jsonSchema: vi.fn((schema: unknown) => ({ kind: "jsonSchema", schema })),
 }));
 
 vi.mock("@ai-sdk/anthropic", () => ({

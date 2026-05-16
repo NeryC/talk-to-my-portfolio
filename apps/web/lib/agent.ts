@@ -1,4 +1,4 @@
-import { ToolLoopAgent, stepCountIs, tool } from "ai";
+import { ToolLoopAgent, jsonSchema, stepCountIs, tool } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import type { DiscoveredTool } from "./mcp-client";
 
@@ -20,7 +20,7 @@ export function buildAgent(discovered: DiscoveredTool[]) {
       t.name,
       tool({
         description: t.description,
-        inputSchema: t.inputSchema as never,
+        inputSchema: jsonSchema(t.inputSchema as Parameters<typeof jsonSchema>[0]) as never,
         execute: async (args: Record<string, unknown>) => {
           const result = await t.invoke(args);
           const first = result.content[0];
