@@ -8,7 +8,7 @@
     "demoUrl": "https://research-agent-three-pi.vercel.app",
     "year": 2026,
     "role": "Solo builder",
-    "stack": ["Next.js 16", "TypeScript", "AI SDK v6", "Exa API", "shadcn/ui", "Tailwind v4"],
+    "stack": ["Next.js 16", "React 19", "TypeScript", "AI SDK v6", "Exa API", "shadcn/ui", "Tailwind v4"],
     "highlights": [
       "ToolLoopAgent with stopWhen(stepCountIs(8))",
       "Streaming tool-call timeline UI",
@@ -25,7 +25,7 @@
     "demoUrl": "https://multi-agent-code-reviewer-sable.vercel.app",
     "year": 2026,
     "role": "Solo builder",
-    "stack": ["Next.js 16", "TypeScript", "AI SDK v6", "Zod", "SSE", "shadcn/ui"],
+    "stack": ["Next.js 16", "React 19", "TypeScript", "AI SDK v6", "Zod", "SSE", "shadcn/ui"],
     "highlights": [
       "3 specialized reviewer agents (Haiku) in parallel",
       "Supervisor agent (Sonnet) aggregates findings",
@@ -42,7 +42,7 @@
     "demoUrl": "https://rag-agent-memory.vercel.app",
     "year": 2026,
     "role": "Solo builder",
-    "stack": ["Next.js 16", "Supabase pgvector", "Voyage AI", "Claude Sonnet 4.6", "Exa fallback"],
+    "stack": ["Next.js 16", "React 19", "TypeScript", "Supabase pgvector", "Voyage AI", "Claude Sonnet 4.6", "Exa fallback"],
     "highlights": [
       "Zero-dep PDF parser (zlib + regex, no pdfjs-dist)",
       "Synchronous ingest within Vercel Hobby 10s limit",
