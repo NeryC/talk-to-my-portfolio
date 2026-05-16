@@ -21,13 +21,21 @@ interface AgentContext {
 
 let _ctxPromise: Promise<AgentContext> | null = null;
 
+function resolveSelfBaseUrl(): string {
+  if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:3000";
+}
+
 // Lazy initialization: the local MCP server at /api/mcp isn't running at
 // module load time during `next build`. We discover tools and build the agent
 // on the first request and memoize the result for subsequent requests.
 function getAgentContext(): Promise<AgentContext> {
   if (_ctxPromise) return _ctxPromise;
   _ctxPromise = (async () => {
-    const base = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
+    const base = resolveSelfBaseUrl();
     const portfolio = await connectStreamableHttp("portfolio", `${base}/api/mcp`);
     const servers: NamedServer[] = [portfolio];
     const githubUrl = process.env.GITHUB_MCP_URL;

@@ -7,10 +7,8 @@ import {
   ListPromptsRequestSchema,
   GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
 import { zodToJsonSchema } from "zod-to-json-schema";
+import pkg from "../package.json" with { type: "json" };
 import { listProjectsTool } from "./tools/list-projects.js";
 import { getProjectTool } from "./tools/get-project.js";
 import { searchByTechTool } from "./tools/search-by-tech.js";
@@ -25,10 +23,6 @@ import { listResources, readResource } from "./resources/index.js";
 import { listPrompts, getPrompt } from "./prompts/index.js";
 import type { SamplingBridge, ElicitationBridge } from "./bridges.js";
 import { configureBridges } from "./bridge-state.js";
-
-const pkg = JSON.parse(
-  readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "package.json"), "utf-8")
-);
 
 export interface BuiltServer {
   server: Server;

@@ -2,29 +2,21 @@
 
 Deferred improvements identified while implementing Tasks 2.1–2.7 (commits `9ed19a4` → `e7f209d`). Each entry notes the blocking phase — i.e., the latest point at which it should be addressed.
 
-## 1. Exclude tests from the published bundle
+## 1. Exclude tests from the published bundle ✅ Resolved
 
 **Severity:** Important
 **File:** `packages/mcp-server/tsconfig.json`
 **Blocking-phase:** Phase 8 (publish)
 
-The current `tsconfig.json` compiles `src/__tests__/**/*.test.ts` into `dist/`, and `package.json` declares `"files": ["dist", "data", "README.md"]`, so test files would be shipped to npm consumers.
+Resolved: `tsconfig.json` now has `"exclude": ["src/**/__tests__/**", "src/**/*.test.ts"]`. Verified `dist/` contains no `*.test.js` files.
 
-Fix: add `"exclude": ["src/**/*.test.ts", "src/**/__tests__/**"]` to `tsconfig.json`, or create a separate `tsconfig.build.json` that the `build` script targets instead.
-
-## 2. Fix project seed data so `searchByTech` tests can revert to plan literals
+## 2. Fix project seed data so `searchByTech` tests can revert to plan literals ✅ Resolved
 
 **Severity:** Minor
 **File:** `packages/shared/data/projects/_index.json`
 **Blocking-phase:** optional, before Phase 5/6 (when real project metadata gets revisited)
 
-The seed `_index.json` is missing `"TypeScript"` and `"React"` tokens even though all three projects are Next.js (React-based) TypeScript apps. Two assertions in `packages/mcp-server/src/tools/__tests__/search-by-tech.test.ts` were adapted in commit `9ad30e0` to match the partial seed data instead of the plan literals.
-
-Fix:
-- Add `"TypeScript"` to `rag-agent-memory.stack`.
-- Add `"React 19"` (verify the actual version against each project's `package.json`) to all three project stacks.
-- Revert the two test assertions to the plan literals.
-- Remove the deviation comment block at the top of the test file.
+Resolved in commit `df27e50` ("fix: align project seed data with reality so searchByTech tests match plan literals").
 
 ## 3. Move imperative-verb description check to a registry-wide test
 
@@ -51,15 +43,13 @@ Options:
 
 Pick before any external client starts consuming the resource list.
 
-## 5. Thread `server` (sampling client) into prompt and tool handlers
+## 5. Thread `server` (sampling client) into prompt and tool handlers ✅ Resolved
 
 **Severity:** High (expected to be addressed by Phase 3 itself)
 **File:** handler signatures in `packages/mcp-server/src/tools/*` and `packages/mcp-server/src/prompts/*`
 **Blocking-phase:** Phase 3 Task 3.5 (wire sampling/elicitation bridges)
 
-Today `tool.execute(args)` and `getPrompt({ name, arguments })` are pure functions with no access to the `Server` instance, so they cannot call `server.createMessage(...)` for sampling or `server.elicitInput(...)` for elicitation. Phase 3 will need to inject `server` (or a `samplingClient` wrapper) into handler signatures.
-
-Fix: introduce a context parameter and refactor the registry to accept either pure or context-aware handlers, so existing handlers don't all need to change at once.
+Resolved: implemented via `bridges.ts` + `bridge-state.ts` module-level state, with sampling/elicitation bridges configured per-initialize. Sampling tests (`pitch-for-role-sampling`, `tech-deep-dive-sampling`, `compare-with-jd-sampling`) and elicitation tests pass.
 
 ## 6. `__resetDataLoaderCache()` is a dead export
 
