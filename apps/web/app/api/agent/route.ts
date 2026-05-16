@@ -1,5 +1,6 @@
 import { buildAgent } from "@/lib/agent";
 import {
+  connectInProcessPortfolio,
   connectStreamableHttp,
   discoverToolsFromServers,
   type NamedServer,
@@ -21,24 +22,10 @@ interface AgentContext {
 
 let _ctxPromise: Promise<AgentContext> | null = null;
 
-function resolveSelfBaseUrl(): string {
-  // Self-call must hit the current deployment. VERCEL_URL is the deployment-
-  // specific hostname (preview or production); VERCEL_PROJECT_PRODUCTION_URL
-  // would point preview deployments at production and we want each preview
-  // to exercise its own /api/mcp.
-  if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return "http://localhost:3000";
-}
-
-// Lazy initialization: the local MCP server at /api/mcp isn't running at
-// module load time during `next build`. We discover tools and build the agent
-// on the first request and memoize the result for subsequent requests.
 function getAgentContext(): Promise<AgentContext> {
   if (_ctxPromise) return _ctxPromise;
   _ctxPromise = (async () => {
-    const base = resolveSelfBaseUrl();
-    const portfolio = await connectStreamableHttp("portfolio", `${base}/api/mcp`);
+    const portfolio = await connectInProcessPortfolio("portfolio");
     const servers: NamedServer[] = [portfolio];
     const githubUrl = process.env.GITHUB_MCP_URL;
     if (githubUrl) {
