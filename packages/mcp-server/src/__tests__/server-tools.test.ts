@@ -15,4 +15,13 @@ describe("server tool handlers", () => {
     const parsed = JSON.parse(res.content[0]!.text);
     expect(parsed.projects).toHaveLength(3);
   });
+
+  it("every registered tool description starts with an imperative verb", async () => {
+    const res = await callListTools(buildServer());
+    for (const tool of res.tools) {
+      expect(tool.description, `tool ${tool.name}`).toMatch(
+        /^(List|Get|Return|Search|Find|Book)/,
+      );
+    }
+  });
 });

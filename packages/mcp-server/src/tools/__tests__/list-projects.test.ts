@@ -28,8 +28,4 @@ describe("listProjects tool", () => {
     })) as ListProjectsResult;
     expect(result.projects).toEqual([]);
   });
-
-  it("exposes a description starting with an imperative verb", () => {
-    expect(listProjectsTool.description).toMatch(/^(List|Get|Return)/);
-  });
 });

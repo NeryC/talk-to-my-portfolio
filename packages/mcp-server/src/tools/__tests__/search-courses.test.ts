@@ -9,7 +9,7 @@ type SearchCoursesResult = {
 
 describe("searchCourses tool", () => {
   it("matches by skill or title (case-insensitive)", async () => {
-    const r = (await searchCoursesTool.execute({ topic: "TypeScript" })) as SearchCoursesResult;
+    const r = (await searchCoursesTool.execute({ topic: "python" })) as SearchCoursesResult;
     expect(r.courses.length).toBeGreaterThanOrEqual(1);
   });
 
@@ -19,7 +19,7 @@ describe("searchCourses tool", () => {
   });
 
   it("every result has a diplomaUrl", async () => {
-    const r = (await searchCoursesTool.execute({ topic: "react" })) as SearchCoursesResult;
+    const r = (await searchCoursesTool.execute({ topic: "data-science" })) as SearchCoursesResult;
     expect(r.courses.length).toBeGreaterThan(0);
     for (const c of r.courses) {
       expect(c.diplomaUrl).toMatch(/^https:\/\//);

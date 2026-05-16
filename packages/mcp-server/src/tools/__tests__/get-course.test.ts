@@ -5,9 +5,9 @@ type GetCourseResult = { slug: string; title: string; diplomaUrl: string };
 
 describe("getCourse tool", () => {
   it("returns full detail for a known slug", async () => {
-    const r = (await getCourseTool.execute({ slug: "curso-de-typescript" })) as GetCourseResult;
-    expect(r.slug).toBe("curso-de-typescript");
-    expect(r.title).toBe("Curso de TypeScript");
+    const r = (await getCourseTool.execute({ slug: "curso-de-python-para-ciencia-de-datos" })) as GetCourseResult;
+    expect(r.slug).toBe("curso-de-python-para-ciencia-de-datos");
+    expect(r.title).toBe("Curso de Python para Ciencia de Datos");
     expect(r.diplomaUrl).toBeTruthy();
   });
 

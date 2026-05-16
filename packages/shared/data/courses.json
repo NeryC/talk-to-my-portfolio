@@ -1,46 +1,78 @@
 {
-  "syncedAt": "2026-05-14T00:00:00.000Z",
-  "source": "mock-seed-pre-sync",
+  "syncedAt": "2026-05-16T00:00:00.000Z",
+  "source": "platzi-manual-scrape-2026-05-16",
   "courses": [
     {
-      "slug": "curso-de-typescript",
-      "title": "Curso de TypeScript",
-      "completedAt": "2023-04-12T00:00:00.000Z",
-      "hours": 10,
-      "skills": ["typescript", "javascript"],
-      "diplomaUrl": "https://platzi.com/p/neryc/curso/typescript/diploma/detalle/"
-    },
-    {
-      "slug": "curso-profesional-de-react",
-      "title": "Curso Profesional de React.js",
-      "completedAt": "2023-05-20T00:00:00.000Z",
-      "hours": 12,
-      "skills": ["react", "frontend"],
-      "diplomaUrl": "https://platzi.com/p/neryc/curso/react/diploma/detalle/"
-    },
-    {
-      "slug": "curso-de-nodejs",
-      "title": "Curso de Node.js",
-      "completedAt": "2023-03-01T00:00:00.000Z",
+      "slug": "curso-profesional-de-scrum",
+      "title": "Curso Profesional de Scrum",
+      "completedAt": "2026-04-28T00:00:00.000Z",
       "hours": 8,
-      "skills": ["nodejs", "backend"],
-      "diplomaUrl": "https://platzi.com/p/neryc/curso/nodejs/diploma/detalle/"
+      "skills": ["scrum", "agile", "project-management"],
+      "diplomaUrl": "https://platzi.com/p/alberto-cano-ortigoza/curso/1750-course/diploma/detalle/"
     },
     {
-      "slug": "curso-de-nextjs",
-      "title": "Curso Profesional de Next.js",
-      "completedAt": "2023-09-15T00:00:00.000Z",
-      "hours": 14,
-      "skills": ["nextjs", "react", "frontend"],
-      "diplomaUrl": "https://platzi.com/p/neryc/curso/nextjs/diploma/detalle/"
+      "slug": "curso-de-claude-code",
+      "title": "Curso de Claude Code",
+      "completedAt": "2026-04-09T00:00:00.000Z",
+      "hours": 6,
+      "skills": ["ai", "llm", "developer-tools", "claude"],
+      "diplomaUrl": "https://platzi.com/p/alberto-cano-ortigoza/curso/12284-course/diploma/detalle/"
     },
     {
-      "slug": "curso-de-postgresql",
-      "title": "Curso de Bases de Datos con PostgreSQL",
-      "completedAt": "2023-02-10T00:00:00.000Z",
-      "hours": 9,
-      "skills": ["postgresql", "sql", "backend"],
-      "diplomaUrl": "https://platzi.com/p/neryc/curso/postgresql/diploma/detalle/"
+      "slug": "curso-de-etica-y-manejo-de-datos-para-data-science-e-inteligencia-artificial",
+      "title": "Curso de Ética y Manejo de Datos para Data Science e Inteligencia Artificial",
+      "completedAt": "2026-04-08T00:00:00.000Z",
+      "hours": 8,
+      "skills": ["data-science", "ai", "ethics", "data-governance"],
+      "diplomaUrl": "https://platzi.com/p/alberto-cano-ortigoza/curso/3156-course/diploma/detalle/"
+    },
+    {
+      "slug": "curso-de-herramientas-de-inteligencia-artificial-para-equipos-de-datos",
+      "title": "Curso de Herramientas de Inteligencia Artificial para Equipos de Datos",
+      "completedAt": "2026-04-08T00:00:00.000Z",
+      "hours": 8,
+      "skills": ["ai", "data-science", "tools", "machine-learning"],
+      "diplomaUrl": "https://platzi.com/p/alberto-cano-ortigoza/curso/7965-course/diploma/detalle/"
+    },
+    {
+      "slug": "curso-de-algebra-lineal-para-machine-learning",
+      "title": "Curso de Álgebra Lineal para Machine Learning",
+      "completedAt": "2026-04-06T00:00:00.000Z",
+      "hours": 12,
+      "skills": ["machine-learning", "mathematics", "linear-algebra", "data-science"],
+      "diplomaUrl": "https://platzi.com/p/alberto-cano-ortigoza/curso/12320-course/diploma/detalle/"
+    },
+    {
+      "slug": "curso-de-mcp-con-microsoft-azure",
+      "title": "Curso de MCP con Microsoft Azure",
+      "completedAt": "2026-03-31T00:00:00.000Z",
+      "hours": 10,
+      "skills": ["mcp", "azure", "ai", "cloud", "microsoft"],
+      "diplomaUrl": "https://platzi.com/p/alberto-cano-ortigoza/curso/12108-course/diploma/detalle/"
+    },
+    {
+      "slug": "curso-de-entornos-virtuales-con-anaconda-y-jupyter",
+      "title": "Curso de Entornos Virtuales con Anaconda y Jupyter",
+      "completedAt": "2026-03-09T00:00:00.000Z",
+      "hours": 6,
+      "skills": ["python", "anaconda", "jupyter", "data-science"],
+      "diplomaUrl": "https://platzi.com/p/alberto-cano-ortigoza/curso/10927-course/diploma/detalle/"
+    },
+    {
+      "slug": "curso-de-python-para-ciencia-de-datos",
+      "title": "Curso de Python para Ciencia de Datos",
+      "completedAt": "2026-03-08T00:00:00.000Z",
+      "hours": 10,
+      "skills": ["python", "data-science", "pandas", "numpy"],
+      "diplomaUrl": "https://platzi.com/p/alberto-cano-ortigoza/curso/10365-course/diploma/detalle/"
+    },
+    {
+      "slug": "curso-de-google-associate-cloud-engineer-certification",
+      "title": "Curso de Google Associate Cloud Engineer Certification",
+      "completedAt": "2026-03-05T00:00:00.000Z",
+      "hours": 15,
+      "skills": ["google-cloud", "cloud", "gcp", "devops"],
+      "diplomaUrl": "https://platzi.com/p/alberto-cano-ortigoza/curso/12251-course/diploma/detalle/"
     }
   ]
 }

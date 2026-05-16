@@ -14,10 +14,12 @@ function getHandler(built: BuiltServer, method: string): Handler {
   return handler;
 }
 
-export async function callListTools(built: BuiltServer): Promise<{ tools: { name: string }[] }> {
+export async function callListTools(
+  built: BuiltServer,
+): Promise<{ tools: { name: string; description: string }[] }> {
   const handler = getHandler(built, ListToolsRequestSchema.shape.method.value);
   const res = await handler({ method: "tools/list" }, {});
-  return res as { tools: { name: string }[] };
+  return res as { tools: { name: string; description: string }[] };
 }
 
 export async function callTool(

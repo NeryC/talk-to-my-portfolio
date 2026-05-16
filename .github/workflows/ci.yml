@@ -36,6 +36,13 @@ jobs:
       - name: Type check
         run: pnpm typecheck
 
+      # Required check: @critical tests cover sampling, elicitation, and
+      # capability negotiation. A regression here breaks the MCP contract,
+      # so we run them BEFORE the full suite — failure mode is "critical
+      # tests failed, the rest didn't run." See packages/mcp-server/README.md.
+      - name: Critical tests (sampling/elicitation/capabilities)
+        run: pnpm test:critical
+
       - name: Test
         run: pnpm test
 

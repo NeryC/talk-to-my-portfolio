@@ -8,7 +8,7 @@ describe("MCP resources", () => {
     expect(uris).toContain("portfolio://cv/full");
     expect(uris).toContain("portfolio://projects/research-agent/readme");
     expect(uris).toContain("portfolio://projects/research-agent/case-study");
-    expect(uris).toContain("portfolio://courses/curso-de-typescript/certificate");
+    expect(uris).toContain("portfolio://courses/curso-de-python-para-ciencia-de-datos/certificate");
   });
 
   it("readResource returns markdown for cv://full", async () => {
@@ -24,7 +24,7 @@ describe("MCP resources", () => {
   });
 
   it("readResource returns JSON for course certificate", async () => {
-    const r = await readResource("portfolio://courses/curso-de-typescript/certificate");
+    const r = await readResource("portfolio://courses/curso-de-python-para-ciencia-de-datos/certificate");
     expect(r.mimeType).toBe("application/json");
     const parsed = JSON.parse(r.text);
     expect(parsed.diplomaUrl).toContain("platzi.com");

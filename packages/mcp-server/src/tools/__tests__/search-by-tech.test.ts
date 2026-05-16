@@ -14,7 +14,7 @@ type SearchByTechResult = {
 
 describe("searchByTech tool", () => {
   it("returns projects + courses + experience matching a tech (case-insensitive)", async () => {
-    const r = (await searchByTechTool.execute({ tech: "react" })) as SearchByTechResult;
+    const r = (await searchByTechTool.execute({ tech: "ai" })) as SearchByTechResult;
     expect(r.projects.length).toBeGreaterThan(0);
     expect(r.courses.length).toBeGreaterThan(0);
     expect(r.experience.length).toBeGreaterThan(0);
@@ -30,6 +30,6 @@ describe("searchByTech tool", () => {
   it("matches across tags, skills, and stack fields", async () => {
     const r = (await searchByTechTool.execute({ tech: "TypeScript" })) as SearchByTechResult;
     expect(r.projects.length).toBe(3);
-    expect(r.courses.some((c) => c.slug === "curso-de-typescript")).toBe(true);
+    expect(r.experience.length).toBeGreaterThan(0);
   });
 });

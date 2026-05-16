@@ -9,7 +9,7 @@
   "scripts": {
     "build": "pnpm -r build",
     "test": "pnpm -r test",
-    "test:critical": "pnpm --filter @neryc/portfolio-mcp test -- --reporter=verbose -t '@critical'",
+    "test:critical": "pnpm --filter @neryc/portfolio-mcp test -- --reporter=verbose -t @critical",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
     "dev": "pnpm --filter web dev",
