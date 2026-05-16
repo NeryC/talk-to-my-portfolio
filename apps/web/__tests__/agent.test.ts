@@ -12,10 +12,6 @@ vi.mock("ai", () => ({
   jsonSchema: vi.fn((schema: unknown) => ({ kind: "jsonSchema", schema })),
 }));
 
-vi.mock("@ai-sdk/anthropic", () => ({
-  anthropic: vi.fn((modelId: string) => ({ kind: "model", modelId })),
-}));
-
 describe("buildAgent", () => {
   it("builds an agent with the discovered tools and the Nery Cano system prompt", () => {
     const fakeTools: DiscoveredTool[] = [

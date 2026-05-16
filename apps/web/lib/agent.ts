@@ -1,5 +1,4 @@
 import { ToolLoopAgent, jsonSchema, stepCountIs, tool } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
 import type { DiscoveredTool } from "./mcp-client";
 
 const SYSTEM_PROMPT = `You are the assistant for Nery Cano's portfolio.
@@ -38,7 +37,11 @@ export function buildAgent(discovered: DiscoveredTool[]) {
   );
 
   return new ToolLoopAgent({
-    model: anthropic("claude-sonnet-4-6"),
+    // String model name routes through Vercel AI Gateway when
+    // AI_GATEWAY_API_KEY is set. Matches the architecture of the other
+    // portfolio projects (research-agent, multi-agent-code-reviewer,
+    // rag-agent-memory) for unified billing and provider abstraction.
+    model: "anthropic/claude-sonnet-4-6",
     instructions: SYSTEM_PROMPT,
     tools: aiTools,
     stopWhen: stepCountIs(10),
