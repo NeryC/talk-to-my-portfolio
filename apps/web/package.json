@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^1.0.0",
+    "@ai-sdk/anthropic": "^2.0.79",
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@neryc/portfolio-mcp": "workspace:^",
     "@neryc/portfolio-shared": "workspace:*",
