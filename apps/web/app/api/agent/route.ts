@@ -22,9 +22,11 @@ interface AgentContext {
 let _ctxPromise: Promise<AgentContext> | null = null;
 
 function resolveSelfBaseUrl(): string {
+  // Self-call must hit the current deployment. VERCEL_URL is the deployment-
+  // specific hostname (preview or production); VERCEL_PROJECT_PRODUCTION_URL
+  // would point preview deployments at production and we want each preview
+  // to exercise its own /api/mcp.
   if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
-  if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
-    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return "http://localhost:3000";
 }
