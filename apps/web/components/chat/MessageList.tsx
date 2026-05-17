@@ -21,6 +21,50 @@ function isVisiblePart(part: UIMessage["parts"][number]): boolean {
   return part.type === "text";
 }
 
+/**
+ * While the agent streams token-by-token, ReactMarkdown briefly sees partial
+ * markdown — e.g. `[ver certificado]` arrives before `(https://...)`, and
+ * `` `code `` arrives before its closing backtick. These render as raw text
+ * for a frame or two until the rest of the token lands, which looks broken.
+ *
+ * For the LAST (still-growing) text part of the LAST assistant message, we
+ * shave off any trailing unfinished link / code / emphasis so the render
+ * always ends on a "renderable" boundary. Once the closing token arrives,
+ * nothing gets trimmed and the link / code / bold appears in one shot.
+ */
+function trimIncompleteMarkdown(text: string): string {
+  let result = text;
+
+  // 1) Incomplete markdown link: trailing `[...]` or `[...](...` without
+  //    the closing `)`. Find the last `[` and check what follows.
+  const lastBracket = result.lastIndexOf("[");
+  if (lastBracket !== -1) {
+    const tail = result.slice(lastBracket);
+    // Complete link: [label](url). Anything else trailing is in-progress.
+    const isCompleteLink = /^\[[^\]]*\]\([^)]+\)/.test(tail);
+    if (!isCompleteLink) {
+      result = result.slice(0, lastBracket);
+    }
+  }
+
+  // 2) Incomplete inline code: an unmatched backtick at the end.
+  const lastBacktick = result.lastIndexOf("`");
+  if (lastBacktick !== -1) {
+    // Count backticks; if odd, the trailing one is unclosed.
+    const matches = result.match(/`/g);
+    if (matches && matches.length % 2 === 1) {
+      result = result.slice(0, lastBacktick);
+    }
+  }
+
+  // 3) Incomplete bold/italic: trailing single or double `*` with nothing
+  //    after. Conservative: only trim a SINGLE trailing `*` or `**` that
+  //    sits at the very end of the text (avoids killing real `*` mid-prose).
+  result = result.replace(/(\*{1,2})$/, "");
+
+  return result;
+}
+
 export function MessageList({ messages, isStreaming }: Props) {
   const endRef = useRef<HTMLDivElement | null>(null);
 
@@ -43,22 +87,39 @@ export function MessageList({ messages, isStreaming }: Props) {
 
   return (
     <div className="flex flex-col gap-5 px-4 py-5">
-      {visibleMessages.map((m) => (
-        <MessageBubble key={m.id} message={m} />
-      ))}
+      {visibleMessages.map((m, i) => {
+        const isLastStreamingAssistant =
+          !!isStreaming &&
+          i === visibleMessages.length - 1 &&
+          m.role === "assistant";
+        return (
+          <MessageBubble
+            key={m.id}
+            message={m}
+            isStreamingTail={isLastStreamingAssistant}
+          />
+        );
+      })}
       {hasThinkingIndicator ? <ThinkingIndicator /> : null}
       <div ref={endRef} />
     </div>
   );
 }
 
-function MessageBubble({ message }: { message: UIMessage }) {
+function MessageBubble({
+  message,
+  isStreamingTail,
+}: {
+  message: UIMessage;
+  isStreamingTail?: boolean;
+}) {
   const isUser = message.role === "user";
+  const visibleParts = message.parts.filter(isVisiblePart);
   if (isUser) {
     return (
       <div className="flex animate-fade-up justify-end">
         <div className="max-w-[85%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-sm text-primary-foreground shadow-[0_4px_12px_-4px_rgba(46,117,182,0.55)]">
-          {message.parts.filter(isVisiblePart).map((part, i) => (
+          {visibleParts.map((part, i) => (
             <PartRenderer key={i} part={part} />
           ))}
         </div>
@@ -68,8 +129,14 @@ function MessageBubble({ message }: { message: UIMessage }) {
   return (
     <div className="w-full animate-fade-up">
       <div className="w-full rounded-2xl border border-border bg-card/80 px-4 py-3 text-sm text-card-foreground shadow-sm backdrop-blur-sm">
-        {message.parts.filter(isVisiblePart).map((part, i) => (
-          <PartRenderer key={i} part={part} />
+        {visibleParts.map((part, i) => (
+          <PartRenderer
+            key={i}
+            part={part}
+            // Only the last text part of the still-streaming assistant
+            // message can have unfinished trailing markdown.
+            trimIncomplete={isStreamingTail && i === visibleParts.length - 1}
+          />
         ))}
       </div>
     </div>
@@ -88,8 +155,17 @@ function ThinkingIndicator() {
   );
 }
 
-function PartRenderer({ part }: { part: UIMessage["parts"][number] }) {
+function PartRenderer({
+  part,
+  trimIncomplete,
+}: {
+  part: UIMessage["parts"][number];
+  trimIncomplete?: boolean;
+}) {
   if (part.type === "text") {
+    const source = trimIncomplete
+      ? trimIncompleteMarkdown(part.text)
+      : part.text;
     return (
       <div
         className={cn(
@@ -107,7 +183,7 @@ function PartRenderer({ part }: { part: UIMessage["parts"][number] }) {
           "[&_pre]:overflow-x-auto [&_pre]:whitespace-pre-wrap",
         )}
       >
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{part.text}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>{source}</ReactMarkdown>
       </div>
     );
   }
