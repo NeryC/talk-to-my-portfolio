@@ -35,13 +35,20 @@ export function MessageList({ messages, isStreaming }: Props) {
 function MessageBubble({ message }: { message: UIMessage }) {
   const isUser = message.role === "user";
   return (
-    <div className={cn("flex flex-col gap-1", isUser ? "items-end" : "items-start")}>
+    <div
+      className={cn(
+        "flex min-w-0 flex-col gap-1",
+        isUser ? "items-end" : "items-start",
+      )}
+    >
       <div
         className={cn(
-          "max-w-[85%] rounded-lg px-3 py-2 text-sm",
-          isUser
-            ? "bg-primary text-primary-foreground"
-            : "bg-muted text-foreground",
+          "min-w-0 rounded-lg px-3 py-2 text-sm",
+          // User messages stay narrow ("speech bubble"); assistant messages
+          // take the full width so wide content (tables, code, tool cards)
+          // doesn't get squeezed into a 85% column inside an already-narrow
+          // 360px widget iframe.
+          isUser ? "max-w-[85%] bg-primary text-primary-foreground" : "w-full bg-muted text-foreground",
         )}
       >
         {message.parts.map((part, i) => (
@@ -55,7 +62,20 @@ function MessageBubble({ message }: { message: UIMessage }) {
 function PartRenderer({ part }: { part: UIMessage["parts"][number] }) {
   if (part.type === "text") {
     return (
-      <div className="prose prose-sm dark:prose-invert max-w-none">
+      <div
+        className={cn(
+          "prose prose-sm dark:prose-invert max-w-none",
+          // Markdown tables overflow narrow widget columns when cells contain
+          // inline code (which is no-wrap by default). Make the whole table
+          // scroll horizontally rather than blow out the layout, and let
+          // inline code wrap at any character.
+          "prose-table:block prose-table:overflow-x-auto prose-table:whitespace-normal",
+          "[&_code]:break-words [&_code]:[overflow-wrap:anywhere]",
+          "[&_pre]:overflow-x-auto [&_pre]:whitespace-pre-wrap",
+          "[&_td]:align-top [&_td]:[overflow-wrap:anywhere]",
+          "[&_th]:[overflow-wrap:anywhere]",
+        )}
+      >
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{part.text}</ReactMarkdown>
       </div>
     );
