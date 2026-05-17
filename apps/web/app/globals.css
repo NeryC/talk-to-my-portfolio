@@ -151,10 +151,74 @@
 .dark .prose th {
   color: #F1F5F9;
   border-bottom-color: rgba(46, 117, 182, 0.40);
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: #94A3B8;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 .dark .prose td,
 .dark .prose th {
+  border-color: rgba(148, 163, 184, 0.10);
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+.dark .prose tbody tr {
+  transition: background 0.15s ease;
+}
+.dark .prose tbody tr:hover {
+  background: rgba(46, 117, 182, 0.06);
+}
+.dark .prose h2,
+.dark .prose h3 {
+  color: #F1F5F9;
+  letter-spacing: -0.01em;
+}
+.dark .prose h2 {
+  font-size: 0.95rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+}
+.dark .prose h3 {
+  font-size: 0.85rem;
+  margin-top: 0.85rem;
+  margin-bottom: 0.4rem;
+}
+.dark .prose hr {
   border-color: rgba(148, 163, 184, 0.14);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.dark .prose p,
+.dark .prose li {
+  color: #CBD5E1;
+}
+.dark .prose a {
+  color: #7DD3FC;
+  text-decoration-color: rgba(125, 211, 252, 0.4);
+}
+.dark .prose a:hover {
+  color: #BAE6FD;
+  text-decoration-color: rgba(125, 211, 252, 0.7);
+}
+
+/* Fade-up entrance for chat messages */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-up {
+  animation: fade-up 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @layer base {
