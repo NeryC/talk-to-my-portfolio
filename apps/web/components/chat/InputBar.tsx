@@ -19,7 +19,7 @@ export function InputBar({
   onStop,
   disabled,
   isStreaming,
-  placeholder = "Ask me anything about Albert's work…",
+  placeholder = "Ask about Nery's projects, skills, courses…",
   className,
 }: Props) {
   const [value, setValue] = useState("");

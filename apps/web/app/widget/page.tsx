@@ -9,13 +9,17 @@ function WidgetInner() {
   const theme = params.get("theme");
 
   useEffect(() => {
+    // Default to dark to match the portfolio at neryc.github.io. Explicit
+    // ?theme=light opts back into the light shadcn defaults for embedders
+    // that want it.
+    const useDark = theme !== "light";
     const root = document.documentElement;
-    if (theme === "dark") root.classList.add("dark");
+    if (useDark) root.classList.add("dark");
     else root.classList.remove("dark");
   }, [theme]);
 
   return (
-    <div className="flex h-[100dvh] w-full items-center justify-center bg-transparent">
+    <div className="flex h-[100dvh] w-full items-center justify-center bg-background">
       <ChatShell mode="widget" />
     </div>
   );

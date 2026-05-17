@@ -47,8 +47,10 @@ function MessageBubble({ message }: { message: UIMessage }) {
           // User messages stay narrow ("speech bubble"); assistant messages
           // take the full width so wide content (tables, code, tool cards)
           // doesn't get squeezed into a 85% column inside an already-narrow
-          // 360px widget iframe.
-          isUser ? "max-w-[85%] bg-primary text-primary-foreground" : "w-full bg-muted text-foreground",
+          // 380px widget iframe.
+          isUser
+            ? "max-w-[85%] bg-primary text-primary-foreground shadow-sm"
+            : "w-full border border-border bg-card text-card-foreground",
         )}
       >
         {message.parts.map((part, i) => (

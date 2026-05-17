@@ -38,12 +38,23 @@ export function ChatShell({ mode, initialMessage, className }: Props) {
     <div
       className={cn(
         "flex flex-col overflow-hidden bg-background",
-        mode === "demo"
-          ? "h-full w-full"
-          : "h-[520px] w-[360px] rounded-xl border border-border shadow-lg",
+        // Both modes fill their container. The widget mode used to set a
+        // fixed 360x520 panel, but the FAB iframe in packages/widget already
+        // controls the outer dimensions and rounded border — having a second
+        // bordered panel inside leaves dead space at the edges.
+        "h-full w-full",
         className,
       )}
     >
+      {mode === "widget" ? (
+        <header className="flex items-center gap-2 border-b border-border px-4 py-2.5 text-sm">
+          <span className="size-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]" />
+          <span className="font-medium text-foreground">Talk to Nery&apos;s portfolio</span>
+          <span className="ml-auto text-[10px] uppercase tracking-wider text-muted-foreground">
+            ai
+          </span>
+        </header>
+      ) : null}
       {mode === "demo" ? (
         <header className="flex items-center justify-between border-b border-border px-4 py-2 text-sm">
           <span className="font-medium">Talk to my portfolio</span>

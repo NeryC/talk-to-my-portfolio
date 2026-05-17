@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --font-heading: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-heading: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -83,38 +83,78 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/*
+ * Dark theme tokens mirror the parent portfolio (neryc.github.io/
+ * nery-cano-portfolio). Deep navy backgrounds, blue/cyan accents,
+ * slate text. See <portfolio>/index.html ":root" block for the canonical
+ * source values.
+ */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #06101F;          /* portfolio --bg-deep */
+  --foreground: #E2E8F0;          /* portfolio --text */
+  --card: #122845;                /* portfolio --bg-card */
+  --card-foreground: #F1F5F9;     /* portfolio --text-strong */
+  --popover: #0E1F3A;             /* portfolio --bg-mid */
+  --popover-foreground: #E2E8F0;
+  --primary: #2E75B6;             /* portfolio --accent */
+  --primary-foreground: #FFFFFF;
+  --secondary: #16335A;           /* portfolio --bg-card-hover */
+  --secondary-foreground: #E2E8F0;
+  --muted: #0E1F3A;               /* portfolio --bg-mid (assistant bubble bg) */
+  --muted-foreground: #94A3B8;    /* portfolio --text-muted */
+  --accent: #4FA9E8;              /* portfolio --accent-light (hover) */
+  --accent-foreground: #06101F;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --border: rgba(148, 163, 184, 0.14);   /* portfolio --border-subtle */
+  --input: rgba(148, 163, 184, 0.22);    /* portfolio --border-mid */
+  --ring: #7DD3FC;                /* portfolio --accent-glow (focus ring) */
+  --chart-1: #7DD3FC;
+  --chart-2: #4FA9E8;
+  --chart-3: #2E75B6;
+  --chart-4: #94A3B8;
+  --chart-5: #64748B;
+  --sidebar: #06101F;
+  --sidebar-foreground: #E2E8F0;
+  --sidebar-primary: #2E75B6;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #122845;
+  --sidebar-accent-foreground: #E2E8F0;
+  --sidebar-border: rgba(148, 163, 184, 0.14);
+  --sidebar-ring: #7DD3FC;
+}
+
+/*
+ * Cyan-glow inline code styling, lifted from the portfolio's
+ * `code, .font-mono { color: var(--accent-glow); }` rule. The widget chat
+ * renders markdown with <code> for tech names (TypeScript, Next.js, etc.);
+ * this gives those tokens the same visual punch as on the portfolio.
+ */
+.dark .prose code,
+.dark .prose code::before,
+.dark .prose code::after {
+  color: #7DD3FC;
+}
+.dark .prose :not(pre) > code {
+  background: rgba(46, 117, 182, 0.18);
+  border: 1px solid rgba(46, 117, 182, 0.30);
+  border-radius: 0.25rem;
+  padding: 0.05rem 0.3rem;
+  font-weight: 500;
+}
+.dark .prose pre {
+  background: #0E1F3A;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+.dark .prose strong {
+  color: #F1F5F9;
+}
+.dark .prose th {
+  color: #F1F5F9;
+  border-bottom-color: rgba(46, 117, 182, 0.40);
+}
+.dark .prose td,
+.dark .prose th {
+  border-color: rgba(148, 163, 184, 0.14);
 }
 
 @layer base {
