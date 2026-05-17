@@ -5,11 +5,20 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { ToolCallCard } from "./ToolCallCard";
 
 interface Props {
   messages: UIMessage[];
   isStreaming?: boolean;
+}
+
+/**
+ * Decide whether a message part should appear in the chat. We hide all tool
+ * call traces (`dynamic-tool`, `tool-*`) and the model's reasoning, since
+ * those are implementation details — visitors only need the final assistant
+ * text. The agent still calls tools internally; we just don't surface them.
+ */
+function isVisiblePart(part: UIMessage["parts"][number]): boolean {
+  return part.type === "text";
 }
 
 export function MessageList({ messages, isStreaming }: Props) {
@@ -19,9 +28,14 @@ export function MessageList({ messages, isStreaming }: Props) {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages, isStreaming]);
 
+  // Skip messages whose only content is tool calls / reasoning. This avoids
+  // empty grey bubbles while the agent is mid-tool-call (e.g. between the
+  // user message and the first text token of the assistant reply).
+  const visibleMessages = messages.filter((m) => m.parts.some(isVisiblePart));
+
   return (
     <div className="flex flex-col gap-4 px-4 py-4">
-      {messages.map((m) => (
+      {visibleMessages.map((m) => (
         <MessageBubble key={m.id} message={m} />
       ))}
       {isStreaming ? (
@@ -45,15 +59,14 @@ function MessageBubble({ message }: { message: UIMessage }) {
         className={cn(
           "min-w-0 rounded-lg px-3 py-2 text-sm",
           // User messages stay narrow ("speech bubble"); assistant messages
-          // take the full width so wide content (tables, code, tool cards)
-          // doesn't get squeezed into a 85% column inside an already-narrow
-          // 380px widget iframe.
+          // take the full width so wide content (tables, code) doesn't get
+          // squeezed into a 85% column inside the 380px widget iframe.
           isUser
             ? "max-w-[85%] bg-primary text-primary-foreground shadow-sm"
             : "w-full border border-border bg-card text-card-foreground",
         )}
       >
-        {message.parts.map((part, i) => (
+        {message.parts.filter(isVisiblePart).map((part, i) => (
           <PartRenderer key={i} part={part} />
         ))}
       </div>
@@ -72,7 +85,6 @@ function PartRenderer({ part }: { part: UIMessage["parts"][number] }) {
           // "Proficient" render as "Profic / ient" at 360px width).
           //   - prose-table:block + overflow-x-auto: the table itself scrolls
           //   - default cell wrapping: words break at spaces, not characters
-          //   - min-w-0 on td/th so columns can shrink but only at word boundaries
           //   - inline <code> falls back to break-words for long no-space tokens
           //   - <pre> blocks keep their own internal scroll
           "prose-table:block prose-table:overflow-x-auto",
@@ -85,51 +97,7 @@ function PartRenderer({ part }: { part: UIMessage["parts"][number] }) {
       </div>
     );
   }
-  if (part.type === "reasoning") {
-    return (
-      <details className="text-xs text-muted-foreground">
-        <summary className="cursor-pointer">reasoning</summary>
-        <pre className="mt-1 whitespace-pre-wrap text-[11px]">{part.text}</pre>
-      </details>
-    );
-  }
-  if (part.type === "dynamic-tool") {
-    return (
-      <ToolCallCard
-        toolName={part.toolName}
-        state={part.state}
-        input={"input" in part ? part.input : undefined}
-        output={"output" in part ? part.output : undefined}
-        errorText={"errorText" in part ? part.errorText : undefined}
-        sourceServer={extractServer(part.toolName)}
-      />
-    );
-  }
-  if (typeof part.type === "string" && part.type.startsWith("tool-")) {
-    const p = part as {
-      type: string;
-      state: string;
-      input?: unknown;
-      output?: unknown;
-      errorText?: string;
-    };
-    const toolName = p.type.slice("tool-".length);
-    return (
-      <ToolCallCard
-        toolName={toolName}
-        state={p.state}
-        input={p.input}
-        output={p.output}
-        errorText={p.errorText}
-        sourceServer={extractServer(toolName)}
-      />
-    );
-  }
+  // Tool calls and reasoning parts are intentionally not rendered — see
+  // isVisiblePart above. This branch only fires if a new part type appears.
   return null;
-}
-
-function extractServer(toolName: string): string | undefined {
-  const idx = toolName.indexOf("__");
-  if (idx < 0) return undefined;
-  return toolName.slice(0, idx);
 }
