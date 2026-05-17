@@ -65,15 +65,18 @@ function PartRenderer({ part }: { part: UIMessage["parts"][number] }) {
       <div
         className={cn(
           "prose prose-sm dark:prose-invert max-w-none",
-          // Markdown tables overflow narrow widget columns when cells contain
-          // inline code (which is no-wrap by default). Make the whole table
-          // scroll horizontally rather than blow out the layout, and let
-          // inline code wrap at any character.
-          "prose-table:block prose-table:overflow-x-auto prose-table:whitespace-normal",
-          "[&_code]:break-words [&_code]:[overflow-wrap:anywhere]",
+          // Tables wider than the widget column scroll horizontally instead
+          // of being squashed and breaking words mid-character (which made
+          // "Proficient" render as "Profic / ient" at 360px width).
+          //   - prose-table:block + overflow-x-auto: the table itself scrolls
+          //   - default cell wrapping: words break at spaces, not characters
+          //   - min-w-0 on td/th so columns can shrink but only at word boundaries
+          //   - inline <code> falls back to break-words for long no-space tokens
+          //   - <pre> blocks keep their own internal scroll
+          "prose-table:block prose-table:overflow-x-auto",
+          "[&_td]:align-top [&_td]:px-2 [&_th]:px-2",
+          "[&_code]:break-words",
           "[&_pre]:overflow-x-auto [&_pre]:whitespace-pre-wrap",
-          "[&_td]:align-top [&_td]:[overflow-wrap:anywhere]",
-          "[&_th]:[overflow-wrap:anywhere]",
         )}
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{part.text}</ReactMarkdown>
