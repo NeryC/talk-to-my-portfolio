@@ -4,7 +4,6 @@ import type { UIMessage } from "ai";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useEffect, useRef } from "react";
-import { Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -67,9 +66,8 @@ function MessageBubble({ message }: { message: UIMessage }) {
     );
   }
   return (
-    <div className="flex animate-fade-up min-w-0 items-start gap-2.5">
-      <AssistantAvatar />
-      <div className="min-w-0 flex-1 rounded-2xl rounded-tl-md border border-border bg-card/80 px-3.5 py-2.5 text-sm text-card-foreground shadow-sm backdrop-blur-sm">
+    <div className="w-full animate-fade-up">
+      <div className="w-full rounded-2xl border border-border bg-card/80 px-4 py-3 text-sm text-card-foreground shadow-sm backdrop-blur-sm">
         {message.parts.filter(isVisiblePart).map((part, i) => (
           <PartRenderer key={i} part={part} />
         ))}
@@ -78,19 +76,10 @@ function MessageBubble({ message }: { message: UIMessage }) {
   );
 }
 
-function AssistantAvatar() {
-  return (
-    <div className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-primary-foreground shadow-md shadow-primary/30 ring-1 ring-primary/20">
-      <Sparkles className="size-3.5" />
-    </div>
-  );
-}
-
 function ThinkingIndicator() {
   return (
-    <div className="flex items-start gap-2.5">
-      <AssistantAvatar />
-      <div className="flex items-center gap-1.5 rounded-2xl rounded-tl-md border border-border bg-card/80 px-3.5 py-3 backdrop-blur-sm">
+    <div className="w-full">
+      <div className="flex w-full items-center gap-1.5 rounded-2xl border border-border bg-card/80 px-4 py-3 backdrop-blur-sm">
         <span className="size-1.5 animate-[bounce_1.2s_infinite_0ms] rounded-full bg-muted-foreground/70" />
         <span className="size-1.5 animate-[bounce_1.2s_infinite_150ms] rounded-full bg-muted-foreground/70" />
         <span className="size-1.5 animate-[bounce_1.2s_infinite_300ms] rounded-full bg-muted-foreground/70" />

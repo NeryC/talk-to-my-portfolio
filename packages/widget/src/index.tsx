@@ -32,8 +32,11 @@ function FAB() {
       {open && (
         <div
           style={{
-            width: 380,
-            height: 560,
+            // Wider iframe so markdown tables, code blocks, and long
+            // sentences read comfortably without horizontal scroll.
+            // Caps at viewport width on small phones (via maxWidth).
+            width: "min(440px, calc(100vw - 32px))",
+            height: "min(640px, calc(100vh - 96px))",
             marginBottom: 12,
             borderRadius: 16,
             overflow: "hidden",
